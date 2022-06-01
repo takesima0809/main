@@ -10,7 +10,7 @@ public class sample1 {
 		classSample classSample=new classSample();
 		classSample.func();
 		System.out.println("kagawa");
-		
+		System.out.println("AIUEO");
 		s.s();
 	}
 

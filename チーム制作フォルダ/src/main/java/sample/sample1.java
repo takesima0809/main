@@ -8,6 +8,7 @@ public class sample1 {
 		// TODO 自動生成されたメソッド・スタブ
 		classSample classSample=new classSample();
 		classSample.func();
+		System.out.println("kagawa");
 	}
 
 }

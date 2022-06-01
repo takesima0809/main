@@ -6,9 +6,12 @@ public class sample1 {
 		System.out.println("aaaa");
 		System.out.println("nagasima");
 		// TODO 自動生成されたメソッド・スタブ
+		spl s=new spl();
 		classSample classSample=new classSample();
 		classSample.func();
 		System.out.println("kagawa");
+		
+		s.s();
 	}
 
 }

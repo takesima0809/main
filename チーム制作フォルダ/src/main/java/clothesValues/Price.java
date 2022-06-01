@@ -2,7 +2,7 @@ package clothesValues;
 
 public class Price {
 public int Price() {
-	return 0;
+	return 2;
 	
 }
 }

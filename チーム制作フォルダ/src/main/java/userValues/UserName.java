@@ -5,7 +5,7 @@ public class UserName {
 	public  void userName(String userName) {
 		this.userName = userName;
 	}
-	public String toInt(){
+	public String toStr(){
 		return userName;
 	}
 }

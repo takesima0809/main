@@ -1,11 +1,11 @@
 package userValues;
 
 public class PhoneNumber {
-	private  int phoneNumber =0;
+	private final int phoneNumber;
 	public PhoneNumber(int phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 	public int toInt(){
-		return phoneNumber;
+		return this.phoneNumber;
 	}
 }

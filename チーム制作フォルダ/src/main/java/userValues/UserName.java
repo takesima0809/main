@@ -6,6 +6,6 @@ public class UserName {
 		this.userName = userName;
 	}
 	public String toStr(){
-		return userName;
+		return this.userName;
 	}
 }

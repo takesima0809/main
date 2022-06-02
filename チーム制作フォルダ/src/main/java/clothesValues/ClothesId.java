@@ -1,9 +1,14 @@
 package clothesValues;
 
 public class ClothesId {
+	
 	private final int clothesId;
 	
-	public ClothesId(int id) {
-		this.clothesId=id;
+	public ClothesId(int clothesId) {
+		this.clothesId=clothesId;
+	}
+	
+	public int toInt() {
+		return this.clothesId;
 	}
 }

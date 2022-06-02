@@ -7,19 +7,19 @@ import userValues.UserName;
 public class UserData {
 	private final PhoneNumber phoneNumber;
 	private final UserId userId;
-	private final UserName UserName;
-	public UserData(PhoneNumber phoneNumber,UserId userId,UserName UserName) {
+	private final UserName userName;
+	public UserData(PhoneNumber phoneNumber,UserId userId,UserName userName) {
 		this.phoneNumber = phoneNumber;
 		this.userId = userId;
-		this.UserName = UserName;
+		this.userName = userName;
 	}
 	public PhoneNumber getPhoneNumber() {
 		return this.phoneNumber;
 	}
 	public UserId getUserId() {
-		return userId;
+		return this.userId;
 	}
 	public UserName getUserName() {
-		return UserName;
+		return this.userName;
 	}
 }

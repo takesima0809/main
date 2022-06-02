@@ -1,8 +1,13 @@
 package clothesValues;
 
 public class Price {
-public int Price() {
-	return 2;
+	private final int price;
 	
-}
+	public Price(int price) {
+		this.price=price;
+	}
+	
+	public int toInt(){
+		return this.price;
+	}
 }

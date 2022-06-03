@@ -1,7 +1,12 @@
 package userValues;
 
 public class UserId {
-public int Id() {
-	return 3;
+	private final int userId;
+	public UserId(int userId) {
+		this.userId = userId;
+	}
+	public int toInt(){
+		return this.userId;
+	}
 }
-}
+

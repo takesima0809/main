@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import entities.BeforeDeposit;
+import entities.DepositData;
+import entities.DepositDataList;
 import entities.RegisterInfo;
 import entities.RegisterList;
 import entities.UserData;
@@ -81,13 +83,61 @@ public class ShopRepository {
 	}
 
 	//預かりデータの一覧表示
-
-	//データを追加
+	public DepositDataList findDepositDataAll(int userId) {
+		DepositDataList depositDataList=new DepositDataList();
+		
+		try(PreparedStatement SelectPreparableStatement=
+				getConnection().prepareStatement("select * from Regist where UserId = ?;")){
+			SelectPreparableStatement.setInt(1, userId);
+			
+			try(ResultSet rs =SelectPreparableStatement.executeQuery()){
+				while(rs.next()) {
+					RegisterInfo registerInfo=new RegisterInfo(rs.getString("DepositDate"),rs.getInt("DepositNumber"));
+					DepositData depositData=new DepositData(rs.getInt("DepositNumber"),rs.getString("DepositDate"), rs.getInt("UserId"),rs.getInt("ClothesId"),rs.getBoolean("WashHurryFinish"),
+							rs.getBoolean("WashDeluxeFinish"),rs.getBoolean("WashStainRemoval"),
+							rs.getInt("TotalAmount"),rs.getString("FinishDate"),rs.getString("FactoryMessage"));
+					depositDataList.addData(depositData);
+					}
+			}catch (Exception e) {
+				System.out.println(e);
+			}
+		}catch (Exception e) {
+			System.out.println(e);
+		}
+		return depositDataList;
+	}
 
 	//データを削除
-
+	public void DeleteDepositData(int depositId) {
+		try(PreparedStatement preparableStatement=
+				getConnection().prepareStatement("delete from Regist where DepositNumber=?;")){
+			preparableStatement.setInt(1, depositId);
+			preparableStatement.executeUpdate();//実行
+		}catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+	
 	//予定日を変更
-
+	public void UpdateDay(int depositId,String day) {
+		try(PreparedStatement preparableStatement=
+				getConnection().prepareStatement("update Regist set FinishDate=? where DepositNumber=?")){
+			preparableStatement.setString(1, day);
+			preparableStatement.setInt(2, depositId);
+			preparableStatement.executeUpdate();//実行
+		}catch (Exception e) {
+			System.out.println(e);
+		}
+	}
 	//メッセージを追加
-
+	public void addMessage(int depositId,String message) {
+		try(PreparedStatement preparableStatement=
+				getConnection().prepareStatement("update Regist set FactoryMessage=? where DepositNumber=?")){
+			preparableStatement.setString(1, message);
+			preparableStatement.setInt(2, depositId);
+			preparableStatement.executeUpdate();//実行
+		}catch (Exception e) {
+			System.out.println(e);
+		}
+	}
 }

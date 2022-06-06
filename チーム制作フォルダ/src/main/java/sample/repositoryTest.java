@@ -51,6 +51,9 @@ public class repositoryTest {
 		//System.out.println(registerInfo.getregistrationDate());
 		//shopRepository.findDepositDataAll(3).next().getDepositDay();
 		//shopRepository.witeUserDatas(userData);
+		System.out.println(shopRepository.getClothesData(2).getPrice().toInt());
+		System.out.println(shopRepository.getClothesData(2).getDay().toInt());
+		
 	}
 
 }

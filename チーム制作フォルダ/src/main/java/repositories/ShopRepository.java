@@ -6,7 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import clothesValues.Price;
+import clothesValues.WaitDay;
 import entities.BeforeDeposit;
+import entities.ClothesData;
 import entities.DepositData;
 import entities.DepositDataList;
 import entities.RegisterInfo;
@@ -139,5 +142,27 @@ public class ShopRepository {
 		}catch (Exception e) {
 			System.out.println(e);
 		}
+	}
+	
+	//衣服データ取得
+	public ClothesData getClothesData(int clothesId) {
+		ClothesData clothesData=null;
+		try(PreparedStatement preparableStatement=
+				getConnection().prepareStatement("select * from Clothes where ClothesId=?;")){
+			preparableStatement.setInt(1, clothesId);
+			try(ResultSet rs =preparableStatement.executeQuery()){
+				if(rs.next()) {
+						Price price=new Price(rs.getInt("ClothesPrice"));
+						WaitDay waitDay=new WaitDay(rs.getInt("FinishDays"));
+						clothesData=new ClothesData(null, price, waitDay);
+					}
+			}catch (Exception e) {
+				System.out.println(e);
+			}
+		}catch (Exception e) {
+			System.out.println(e);
+		}
+		
+		return clothesData;
 	}
 }

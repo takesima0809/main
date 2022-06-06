@@ -13,7 +13,6 @@ import entities.ClothesData;
 import entities.DepositData;
 import entities.DepositDataList;
 import entities.RegisterInfo;
-import entities.RegisterList;
 import entities.UserData;
 
 public class ShopRepository {
@@ -47,8 +46,8 @@ public class ShopRepository {
 	}
 
 	//追加したデータの一覧表示＋（登録）
-	public RegisterList showAddDatas(BeforeDeposit beforeDeposit,int clothesCount) {
-		RegisterList registerList=new RegisterList();
+	public RegisterInfo showAddDatas(BeforeDeposit beforeDeposit) {
+		RegisterInfo registerInfo=null;
 		try(PreparedStatement preparableStatement=
 				getConnection().prepareStatement("insert into Regist (UserId,ClothesId,"
 						+"WashHurryFinish,WashDeluxeFinish,WashStainRemoval,FinishDate,TotalAmount)"
@@ -58,20 +57,18 @@ public class ShopRepository {
 			preparableStatement.setInt(2, beforeDeposit.getClothesData());
 			preparableStatement.setBoolean(3, beforeDeposit.getCleanOption1());
 			preparableStatement.setBoolean(4, beforeDeposit.getCleanOption2());
-			preparableStatement.setBoolean(5, beforeDeposit.getCleanOption3());
+			preparableStatement.setInt(5, beforeDeposit.getCleanOption3());
 			preparableStatement.setString(6, beforeDeposit.getFinishDay());
 			preparableStatement.setInt(7, beforeDeposit.geTotalPrice());
 
 			preparableStatement.executeUpdate();//実行
 
 			try(PreparedStatement SelectPreparableStatement=
-					getConnection().prepareStatement("select Regist.DepositNumber,Regist.DepositDate from Regist order by Regist.DepositNumber desc limit ?;")){
-				SelectPreparableStatement.setInt(1, clothesCount);
+					getConnection().prepareStatement("select Regist.DepositNumber,Regist.DepositDate from Regist order by Regist.DepositNumber desc limit 1;")){
 
 				try(ResultSet rs =SelectPreparableStatement.executeQuery()){
 					while(rs.next()) {
-						RegisterInfo registerInfo=new RegisterInfo(rs.getString("DepositDate"),rs.getInt("DepositNumber"));
-						registerList.add(registerInfo);
+						registerInfo=new RegisterInfo(rs.getString("DepositDate"),rs.getInt("DepositNumber"));
 					}
 				}catch (Exception e) {
 					System.out.println(e);
@@ -82,7 +79,7 @@ public class ShopRepository {
 		}catch (Exception e) {
 			System.out.println(e);
 		}
-		return registerList;
+		return registerInfo;
 	}
 
 	//預かりデータの一覧表示
@@ -164,5 +161,29 @@ public class ShopRepository {
 		}
 		
 		return clothesData;
+	}
+	
+	//絞り込み
+	public DepositDataList getFilteringList(String depositDate) {
+		DepositDataList depositDataList=new DepositDataList();
+		try(PreparedStatement preparableStatement=
+				getConnection().prepareStatement("select * from Regist where DepositDate like ?;")){
+			preparableStatement.setString(1,"%"+depositDate+"%");
+			try(ResultSet rs =preparableStatement.executeQuery()){
+				if(rs.next()) {
+					RegisterInfo registerInfo=new RegisterInfo(rs.getString("DepositDate"),rs.getInt("DepositNumber"));
+					DepositData depositData=new DepositData(rs.getInt("DepositNumber"),rs.getString("DepositDate"), rs.getInt("UserId"),rs.getInt("ClothesId"),rs.getBoolean("WashHurryFinish"),
+							rs.getBoolean("WashDeluxeFinish"),rs.getBoolean("WashStainRemoval"),
+							rs.getInt("TotalAmount"),rs.getString("FinishDate"),rs.getString("FactoryMessage"));
+					depositDataList.addData(depositData);
+					}
+			}catch (Exception e) {
+				System.out.println(e);
+			}
+		}catch (Exception e) {
+			System.out.println(e);
+		}
+		
+		return depositDataList;
 	}
 }

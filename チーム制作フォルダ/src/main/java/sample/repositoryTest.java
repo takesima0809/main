@@ -2,8 +2,6 @@ package sample;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 import entities.BeforeDeposit;
 import entities.DepositData;
@@ -28,22 +26,32 @@ public class repositoryTest {
 		ShopRepository shopRepository=new ShopRepository();
 		//RegisterInfo registerInfo=shopRepository.showAddDatas(beforeDeposit, 1).next();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		// Date型変換
-		Date formatDate=null;
-		DepositDataList depositDataList=shopRepository.findDepositDataAll(3);
 		DepositData depositData=null;
+		
+		
+//		// Date型変換
+//		Date formatDate=null;
+//		//DepositDataList depositDataList=shopRepository.findDepositDataAll(3);
+//		DepositData depositData=null;
+//		
+//		//depositData=depositDataList.next();
+//		//formatDate=sdf.parse(depositData.getDepositDay());
+//
+//		//カレンダー型
+//		Calendar cdr =Calendar.getInstance();
+//		cdr.setTime(formatDate);
+//		cdr.add(Calendar.HOUR_OF_DAY, 9);
+//		formatDate=cdr.getTime();
+//		//str変換
+//		String string=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(formatDate);
+//		System.out.println(string);
+
+		DepositDataList depositDataList=shopRepository.getFilteringList("2022-06-03");
 		while(depositDataList.hasNext()) {
 			depositData=depositDataList.next();
-			formatDate=sdf.parse(depositData.getDepositDay());
+			System.out.println(depositData.getFactoryMessage());
+			System.out.println(depositData.getFinishDay());
 		}
-		//カレンダー型
-		Calendar cdr =Calendar.getInstance();
-		cdr.setTime(formatDate);
-		cdr.add(Calendar.HOUR_OF_DAY, 9);
-		formatDate=cdr.getTime();
-		//str変換
-		String string=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(formatDate);
-		System.out.println(string);
 		
 		//shopRepository.addMessage(1, "シャツが破けてしまいました");
 		//shopRepository.UpdateDay(1, "お渡し可");
@@ -51,9 +59,9 @@ public class repositoryTest {
 		//System.out.println(registerInfo.getregistrationDate());
 		//shopRepository.findDepositDataAll(3).next().getDepositDay();
 		//shopRepository.witeUserDatas(userData);
-		System.out.println(shopRepository.getClothesData(2).getPrice().toInt());
-		System.out.println(shopRepository.getClothesData(2).getDay().toInt());
-		
+		//		System.out.println(shopRepository.getClothesData(2).getPrice().toInt());
+		//		System.out.println(shopRepository.getClothesData(2).getDay().toInt());
+
 	}
 
 }

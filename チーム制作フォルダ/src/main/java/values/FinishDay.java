@@ -10,4 +10,8 @@ public class FinishDay {
 	public String toString() {
 		return this.finishDay;
 	}
+	
+	public int toInt() {
+		return Integer.parseInt(finishDay);
+	}
 }

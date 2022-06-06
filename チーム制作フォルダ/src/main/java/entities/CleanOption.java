@@ -1,7 +1,7 @@
 package entities;
 
-import clothesValues.Price;
 import clothesValues.WaitDay;
+import values.TotalPrice;
 
 public class CleanOption {
 	//特急仕上げ
@@ -10,12 +10,13 @@ public class CleanOption {
 	}
 	
 	//デラックス仕上げ
-	public double washDeluxeFinish(Price price) {
-		return price.toInt()*1.5;
+	public int washDeluxeFinish(int price) {
+		price*=1.5;
+		return (int)Math.round(price);
 	}
 	
 	//染抜き
-	public int washStainRemoval(Price price,int count) {
+	public int washStainRemoval(TotalPrice price,int count) {
 		return price.toInt()+(count*200);
 	}
 		

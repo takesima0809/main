@@ -1,17 +1,23 @@
 package service;
 
+import clothesValues.ClothesId;
+import entities.DepositDataList;
 import entities.RegisterInfo;
 import entities.UserData;
 import repositories.ShopRepository;
+import userValues.UserId;
 
 public class FindService {
-	ShopRepository shopRepository;
+	private final ShopRepository shopRepository;
 	public FindService() {
 		this.shopRepository = new ShopRepository();
 	}
-	public void FindUserData(UserData userData) {
+	
+	public void findClothesDatas(ClothesId clothesId) {
+		shopRepository.getClothesData(clothesId.toInt());
 	}
-	public void FindFactory(RegisterInfo registerInfo) {
-		
+	
+	public DepositDataList findDepositDatas(UserId userId) {
+		return this.shopRepository.findDepositDataAll(userId.toInt());
 	}
 }

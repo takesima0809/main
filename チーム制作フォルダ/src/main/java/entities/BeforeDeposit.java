@@ -1,19 +1,20 @@
 package entities;
 
-import values.FinishDay;
-import values.TotalPrice;
-
 public class BeforeDeposit {
 	private final UserData userData;
-	private final ClothesData clothesData;
-	private final CleanOption cleanOption;
-	private final TotalPrice totalPrice;
-	private final FinishDay finishDay;
+	private final int clothesId;
+	private final boolean option1;
+	private final boolean option2;
+	private final boolean option3;
+	private final int totalPrice;
+	private final String finishDay;
 	
-	public BeforeDeposit(UserData userData,ClothesData clothesData,CleanOption cleanOption,TotalPrice totalPrice,FinishDay finishDay) {
+	public BeforeDeposit(UserData userData,int clothesId,boolean option1,boolean option2,boolean option3,int totalPrice,String finishDay) {
 		this.userData=userData;
-		this.cleanOption=cleanOption;
-		this.clothesData=clothesData;
+		this.option1=option1;
+		this.option2=option2;
+		this.option3=option3;
+		this.clothesId=clothesId;
 		this.totalPrice=totalPrice;
 		this.finishDay=finishDay;
 	}
@@ -22,19 +23,27 @@ public class BeforeDeposit {
 		return this.userData;
 	}
 	
-	public ClothesData getClothesData() {
-		return this.clothesData;
+	public int getClothesData() {
+		return this.clothesId;
 	}
 	
-	public CleanOption getCleanOption() {
-		return this.cleanOption;
+	public boolean getCleanOption1() {
+		return this.option1;
 	}
 	
-	public TotalPrice geTotalPrice() {
+	public boolean getCleanOption2() {
+		return this.option2;
+	}
+	
+	public boolean getCleanOption3() {
+		return this.option3;
+	}
+	
+	public int geTotalPrice() {
 		return this.totalPrice;
 	}
 	
-	public FinishDay getFinishDay() {
+	public String getFinishDay() {
 		return this.finishDay;
 	}
 }

@@ -1,13 +1,13 @@
 package values;
 
 public class FinishDay {
-	private final int finishDay;
+	private final String finishDay;
 	
-	public FinishDay(int finishDay) {
+	public FinishDay(String finishDay) {
 		this.finishDay=finishDay;
 	}
 	
-	public int toInt() {
+	public String toString() {
 		return this.finishDay;
 	}
 }

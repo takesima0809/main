@@ -1,7 +1,7 @@
 package entities;
 
 public class BeforeDeposit {
-	private final UserData userData;
+	private final int userId;
 	private final int clothesId;
 	private final boolean option1;
 	private final boolean option2;
@@ -9,8 +9,8 @@ public class BeforeDeposit {
 	private final int totalPrice;
 	private final String finishDay;
 	
-	public BeforeDeposit(UserData userData,int clothesId,boolean option1,boolean option2,boolean option3,int totalPrice,String finishDay) {
-		this.userData=userData;
+	public BeforeDeposit(int userId,int clothesId,boolean option1,boolean option2,boolean option3,int totalPrice,String finishDay) {
+		this.userId=userId;
 		this.option1=option1;
 		this.option2=option2;
 		this.option3=option3;
@@ -19,8 +19,8 @@ public class BeforeDeposit {
 		this.finishDay=finishDay;
 	}
 	
-	public UserData getUserData() {
-		return this.userData;
+	public int getUserId() {
+		return this.userId;
 	}
 	
 	public int getClothesData() {

@@ -4,12 +4,13 @@ import repositories.ShopRepository;
 
 public class DeleteService {
 	private final ShopRepository shopRepository;
-	
+
 	public DeleteService() {
 		this.shopRepository=new ShopRepository();
 	}
-	
-	public void deleteData(int depositNumber){//お渡し
+
+	//データ削除
+	public void deleteData(int[] depositNumber) {
 		this.shopRepository.DeleteDepositData(depositNumber);
 	}
 }

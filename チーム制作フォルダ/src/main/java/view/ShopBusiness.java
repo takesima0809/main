@@ -33,7 +33,7 @@ public class ShopBusiness {
 	}
 
 	// ２．衣類受付依頼
-	public void viewReception(BeforeDeposit beforeDeposit) { 
+	public void viewReception(BeforeDeposit beforeDeposit) {
 		Scanner scan = new Scanner(System.in);
 
 
@@ -44,7 +44,7 @@ public class ShopBusiness {
 		int clothesId=0;
 		//オプション1,2の有無を表すboolean配列
 		boolean[] optionJudgment = {false,false};
-		String optionJudgmentStr = null;
+		String optionJudgmentStr = "0";
 		//オプション3の個所数を表す
 		String stainNumStr = null;
 		int stainNum;
@@ -77,90 +77,84 @@ public class ShopBusiness {
 			System.out.println("服は番号で指定してください");
 			System.out.println("オプションに関しては「0」なし「1」あり、として入力してください");
 			System.out.println("染み抜きオプションは染み抜き箇所入力してください");
-
 			System.out.println("登録回数を入力してください");
 
 			//依頼回数を表す変数
 			String addCountstr;
 			int addCount=0;
 
-			//オプション１をつけるかどうか判断する（０は必要１不要）
-			int option1=1;
-
 			addCountstr=scan.next();//登録回数を入力
-
-			//クリーニング依頼回数をintに直す
-			if(checkString(addCountstr))
+			addCount=Integer.parseInt(addCountstr);
+			
+			
+			if(addCount<=0||9<=addCount)
 			{
-				System.out.println("分岐１");
-				addCount=Integer.parseInt(addCountstr);
-			}
-			//数列に戻せなければ
-			else
-			{
-				while(checkString(addCountstr))
+				while(1<=addCount&&addCount<=8)
 				{
-					System.out.println("分岐２");
+					addCountstr=scan.next();
 					addCount=Integer.parseInt(addCountstr);
 				}
 			}
+			
+			
 			//回数分依頼を受け付ける
 			for(int i=0;i<addCount;i++)
 			{
 				//服の番号を入力
 				System.out.println("服の番号を１～８までで入力してください");
 				clothesIdStr=scan.next();
-
-				System.out.println("あ");
-				//服番号が正しいか判断して正しく整数を入力するまで繰り返す
-				while(1>Integer.parseInt(clothesIdStr)||Integer.parseInt(clothesIdStr)>8)
-				{
-					System.out.println("fsdfsd");
-					System.out.println("服の番号を１～８までで入力してください");
-					clothesIdStr=scan.next();
-				}
-				//入力された服の番号をintに代入
-				System.out.println("い");
 				clothesId=Integer.parseInt(clothesIdStr);
 
-				if(clothesId==1||clothesId==0)
-				{
-					option1=1;
-				}
 
-				//オプション１，２の有り無しを判断
-				for(int j=0+option1;j<optionJudgment.length;j++)
+				//服番号が正しいか判断して正しく整数を入力するまで繰り返す
+				//				while(Integer.parseInt(clothesIdStr)<0||8<Integer.parseInt(clothesIdStr))
+				//				{
+				//					System.out.println("服の番号を１～８までで入力してください");
+				//					clothesIdStr=scan.next();
+				//				}
+				//入力された服の番号をintに代入
+				//				clothesId=Integer.parseInt(clothesIdStr);
+
+				if(clothesId==1||clothesId==2)
 				{
-					//正しい値を入力するまで繰り返す
-					while(Integer.parseInt(optionJudgmentStr)!=0||Integer.parseInt(optionJudgmentStr)!=1)
-					{
-						System.out.println("オプション"+(j+1)+"をつけるか入力してください\n0.不要\n1.必要");
-						optionJudgmentStr=scan.next();
-					}
+
+					//オプション１の有り無しを判断
+
+					System.out.println("オプション１をつけるか入力してください\n1.不要\n2.必要");
+					optionJudgmentStr=scan.next();
 
 					if(Integer.parseInt(optionJudgmentStr)==1)
 					{
-						optionJudgment[j]=true;
+						optionJudgment[0]=true;
 					}
 
 					else if(Integer.parseInt(optionJudgmentStr)==0)
 					{
-						optionJudgment[j]=false;
+						optionJudgment[0]=false;
 					}
 				}
+				//オプション２の有り無しを判断
+
+				System.out.println("オプション２をつけるか入力してください\n1.不要\n2.必要");
+				optionJudgmentStr=scan.next();
+
+				if(Integer.parseInt(optionJudgmentStr)==1)
+				{
+					optionJudgment[1]=true;
+				}
+
+				else if(Integer.parseInt(optionJudgmentStr)==0)
+				{
+					optionJudgment[1]=false;
+				}
+
 
 				//オプション３の数をシミの数を入力する
-				while(Integer.parseInt(stainNumStr)<0)
-				{
-					System.out.println("オプション３によるシミの数を入力してください。\nない場合は0と入力してください");
-					stainNumStr=scan.next();
-				}
+				System.out.println("オプション３によるシミの数を入力してください。\nない場合は0と入力してください");
+				stainNumStr=scan.next();
+
+
 				stainNum=Integer.parseInt(stainNumStr);
-
-
-				//ユーザID、合計金額、仕上がり日取得
-
-
 
 				//入力情報を引数の該当するものに追加
 				beforeDeposit = new BeforeDeposit(userData,clothesId,optionJudgment[0],optionJudgment[1],stainNum,totalPrice,factoryMessage);
@@ -168,18 +162,20 @@ public class ShopBusiness {
 				System.out.println((i+1)+"件目をリストに追加しました");
 			}
 			//登録した衣類リストを確認用に表示
-			for(int i=0;i<addCount;i++) {
-				System.out.println("衣類リストだと思ってね");
-
+			for(int i=0;i<addCount;i++) 
+			{
+				System.out.println("衣類リスト");
 			}
 		}
 		catch(InputMismatchException e)
 		{
-			System.out.println("エラーが発生したのでめにゅーに戻ります");
+			System.out.println("エラーが発生したのでメニューに戻ります");
+			beforeDepositList.clear();;
 		}
 		catch(NumberFormatException e)
 		{
 			System.out.println("数値でないためエラーが発生したのでメニューに戻ります");
+			beforeDepositList.clear();
 		}
 
 

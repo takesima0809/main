@@ -33,7 +33,7 @@ public class ShopBusiness {
 	}
 
 	// ２．衣類受付依頼
-	public void viewReception(BeforeDeposit beforeDeposit) {
+	public void viewReception(BeforeDeposit beforeDeposit) { 
 		Scanner scan = new Scanner(System.in);
 
 
@@ -111,13 +111,16 @@ public class ShopBusiness {
 				System.out.println("服の番号を１～８までで入力してください");
 				clothesIdStr=scan.next();
 
+				System.out.println("あ");
 				//服番号が正しいか判断して正しく整数を入力するまで繰り返す
 				while(1>Integer.parseInt(clothesIdStr)||Integer.parseInt(clothesIdStr)>8)
 				{
+					System.out.println("fsdfsd");
 					System.out.println("服の番号を１～８までで入力してください");
 					clothesIdStr=scan.next();
 				}
 				//入力された服の番号をintに代入
+				System.out.println("い");
 				clothesId=Integer.parseInt(clothesIdStr);
 
 				if(clothesId==1||clothesId==0)

@@ -3,13 +3,6 @@ package service;
 import repositories.ShopRepository;
 
 public class UpdataService {
-<<<<<<< HEAD
-	ShopRepository shopRepository;
-//	public AddService() {
-//		this.shopRepository = new ShopRepository();
-//	}
-}
-=======
 	private final ShopRepository shopRepository;
 	public UpdataService() {
 		this.shopRepository = new ShopRepository();
@@ -21,4 +14,3 @@ public class UpdataService {
 		this.shopRepository.addMessage(depositId, message);
 	}
 }
->>>>>>> main

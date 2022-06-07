@@ -39,7 +39,7 @@ public class ShopRepository {
 		
 		// Date型変換
 		Date formatDate=null;
-
+		
 		formatDate=sdf.parse(str);
 
 		//カレンダー型
@@ -52,6 +52,14 @@ public class ShopRepository {
 		
 		return string;
 	}
+	
+	private String deleteTime(String str) {
+		if(!str.equals("お渡し可")) {
+			return str.substring(0,str.length()-9);
+		}
+		return str;
+	}
+	
 	//会員登録
 	public void witeUserDatas(UserData userData){
 
@@ -115,10 +123,10 @@ public class ShopRepository {
 
 			try(ResultSet rs =SelectPreparableStatement.executeQuery()){
 				while(rs.next()) {
-					RegisterInfo registerInfo=new RegisterInfo(rs.getString(setDate("DepositDate")),rs.getInt("DepositNumber"));
-					DepositData depositData=new DepositData(rs.getInt("DepositNumber"),rs.getString("DepositDate"), rs.getInt("UserId"),rs.getInt("ClothesId"),rs.getBoolean("WashHurryFinish"),
+					RegisterInfo registerInfo=new RegisterInfo(setDate(rs.getString("DepositDate")),rs.getInt("DepositNumber"));
+					DepositData depositData=new DepositData(rs.getInt("DepositNumber"),setDate(rs.getString("DepositDate")), rs.getInt("UserId"),rs.getInt("ClothesId"),rs.getBoolean("WashHurryFinish"),
 							rs.getBoolean("WashDeluxeFinish"),rs.getBoolean("WashStainRemoval"),
-							rs.getInt("TotalAmount"),rs.getString("FinishDate"),rs.getString("FactoryMessage"));
+							rs.getInt("TotalAmount"),deleteTime(rs.getString("FinishDate")),rs.getString("FactoryMessage"));
 					depositDataList.addData(depositData);
 				}
 			}catch (Exception e) {
@@ -195,8 +203,8 @@ public class ShopRepository {
 				getConnection().prepareStatement("select * from Regist where DepositDate like ?;")){
 			preparableStatement.setString(1,"%"+depositDate+"%");
 			try(ResultSet rs =preparableStatement.executeQuery()){
-				if(rs.next()) {
-					RegisterInfo registerInfo=new RegisterInfo(rs.getString(setDate("DepositDate")),rs.getInt("DepositNumber"));
+				while(rs.next()) {
+					RegisterInfo registerInfo=new RegisterInfo(setDate(rs.getString("DepositDate")),rs.getInt("DepositNumber"));
 					DepositData depositData=new DepositData(rs.getInt("DepositNumber"),rs.getString("DepositDate"), rs.getInt("UserId"),rs.getInt("ClothesId"),rs.getBoolean("WashHurryFinish"),
 							rs.getBoolean("WashDeluxeFinish"),rs.getBoolean("WashStainRemoval"),
 							rs.getInt("TotalAmount"),rs.getString("FinishDate"),rs.getString("FactoryMessage"));
@@ -221,7 +229,7 @@ public class ShopRepository {
 				preparableStatement.setInt(1,depositNumber[i]);
 				try(ResultSet rs =preparableStatement.executeQuery()){
 					if(rs.next()) {
-						RegisterInfo registerInfo=new RegisterInfo(rs.getString(setDate("DepositDate")),rs.getInt("DepositNumber"));
+						RegisterInfo registerInfo=new RegisterInfo(setDate(rs.getString("DepositDate")),rs.getInt("DepositNumber"));
 						DepositData depositData=new DepositData(rs.getInt("DepositNumber"),rs.getString("DepositDate"), rs.getInt("UserId"),rs.getInt("ClothesId"),rs.getBoolean("WashHurryFinish"),
 								rs.getBoolean("WashDeluxeFinish"),rs.getBoolean("WashStainRemoval"),
 								rs.getInt("TotalAmount"),rs.getString("FinishDate"),rs.getString("FactoryMessage"));

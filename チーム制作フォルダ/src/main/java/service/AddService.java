@@ -40,7 +40,7 @@ public class AddService {
 			//計算(price.ext)
 			this.shopRepository.getClothesData(beforeDeposit.getClothesData());
 			TotalPrice totalPrice=new TotalPrice(this.shopRepository.getClothesData(beforeDeposit.getClothesData()).getPrice().toInt());
-			FinishDay finishDay=new FinishDay(this.shopRepository.getClothesData(beforeDeposit.getClothesData()).getDay().toString());	
+			FinishDay finishDay=new FinishDay(shopRepository.getClothesData(beforeDeposit.getClothesData()).getDay().toInt());
 			
 			//処理
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -55,9 +55,9 @@ public class AddService {
 			
 			//オプション1
 			if(beforeDeposit.getCleanOption1()) {
-				cdr.add(Calendar.DAY_OF_MONTH,1);
+				cdr.add(Calendar.DATE,1);
 			}else {
-				cdr.add(Calendar.DAY_OF_MONTH,Integer.parseInt(beforeDeposit.getFinishDay()));
+				cdr.add(Calendar.DATE,finishDay.toInt());
 			}
 			date=cdr.getTime();
 			//str変換

@@ -2,10 +2,12 @@ package view;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 import entities.BeforeDeposit;
+import entities.UserData;
 
 public class ShopBusiness {
 	// １．お客情報会員登録
@@ -33,119 +35,150 @@ public class ShopBusiness {
 	// ２．衣類受付依頼
 	public void viewReception(BeforeDeposit beforeDeposit) {
 		Scanner scan = new Scanner(System.in);
-		//オプションの有無を表すboolean配列
-		boolean[] optionOnOff = {false,false,false};
-		//工場メッセージを表す
-		String factoryMessage="";
-		//ユーザID
-		int userId=1;
+
+
+		//ユーザデータ
+		UserData userData = new UserData(null,null,null);
+		//服のID
+		String clothesIdStr=null;
+		int clothesId=0;
+		//オプション1,2の有無を表すboolean配列
+		boolean[] optionJudgment = {false,false};
+		String optionJudgmentStr = null;
+		//オプション3の個所数を表す
+		String stainNumStr = null;
+		int stainNum;
 		//合計金額
 		int totalPrice=1000;
-		//服のID
-		int clothesId=0;
-		//オプションを登録する際に使うカウント用変数
-		int optionCount=1;
+		//工場メッセージを表す
+		String factoryMessage="aaaa";
 
 		List<BeforeDeposit> beforeDepositList=new ArrayList<>();
-	
-		System.out.println(
-				format("種類",25) + format("料金(円)",10) + "仕上がり日数\n"
-						+ format("1.ワイシャツ",25)+  format("150",10) + "3\n"
-						+ format("2.スラックス",25)+  format("200",10)  +"3\n"
-						+ format("3.ジャケット",25)+ format("350",10) + "3\n"
-						+ format("4.シャツ一般",25)+  format("200",10) + "5\n"
-						+ format("5.パンツ・スカート",25)+  format("300",10) + "5\n"
-						+ format("6.アウター一般",25)+  format("1200",10)+ "5\n"
-						+ format("7.アウターダウン",25)+  format("2500",10)+ "14\n"
-						+ format("8.毛布",25)+  format("1200",10)+ "14\n");
-		System.out.println(format("オプション１：",25)+format("特急仕上げ：",15)+"スーツ、ワイシャツのみに対応。翌日の仕上がりになります。追加料金は発生しません。");
-		System.out.println(format("オプション２：",25)+format("豪華仕上げ：",15)+"高級仕上げ、金額は通常料金の1.5倍になります。");
-		System.out.println(format("オプション３：",25)+format("染み抜き：",15)+"衣類に関係なく、一か所につき200円かかります。複数個数の時はその数だけ加算します。\n\n");
 
-		System.out.println("例に従って衣類の登録最大十件行ってください");
-		//		System.out.println("十件以下の場合「0」と入力してください");
-		System.out.println("服は番号で指定してください");
-		System.out.println("オプションに関しては「0」なし「1」あり、として入力してください");
-		System.out.println("染み抜きオプションは染み抜き箇所入力してください");
+		try
+		{
+			//ここに値段表をsysoで書く
+			System.out.println(
+					format("種類",25) + format("料金(円)",10) + "仕上がり日数\n"
+							+ format("1.ワイシャツ",25)+  format("150",10) + "3\n"
+							+ format("2.スラックス",25)+  format("200",10)  +"3\n"
+							+ format("3.ジャケット",25)+ format("350",10) + "3\n"
+							+ format("4.シャツ一般",25)+  format("200",10) + "5\n"
+							+ format("5.パンツ・スカート",25)+  format("300",10) + "5\n"
+							+ format("6.アウター一般",25)+  format("1200",10)+ "5\n"
+							+ format("7.アウターダウン",25)+  format("2500",10)+ "14\n"
+							+ format("8.毛布",25)+  format("1200",10)+ "14\n");
+			System.out.println(format("オプション１：",25)+format("特急仕上げ：",15)+"スーツ、ワイシャツのみに対応。翌日の仕上がりになります。追加料金は発生しません。");
+			System.out.println(format("オプション２：",25)+format("豪華仕上げ：",15)+"高級仕上げ、金額は通常料金の1.5倍になります。");
+			System.out.println(format("オプション３：",25)+format("染み抜き：",15)+"衣類に関係なく、一か所につき200円かかります。複数個数の時はその数だけ加算します。\n\n");
 
-		System.out.println("登録回数を入力してください");
-		
-		String addCountS=scan.next();//登録回数を入力
-		int addCountInt = 0;
+			System.out.println("例に従って衣類の登録最大十件行ってください");
+			//		System.out.println("十件以下の場合「0」と入力してください");
+			System.out.println("服は番号で指定してください");
+			System.out.println("オプションに関しては「0」なし「1」あり、として入力してください");
+			System.out.println("染み抜きオプションは染み抜き箇所入力してください");
 
-		if(addCountS.matches("[+-]?\\d*(\\.\\d+)?")) {
-			addCountInt=Integer.parseInt(addCountS);
-		}
-		for (int i = 0; i < addCountInt; i++) {
+			System.out.println("登録回数を入力してください");
 
-			//衣類id、オプション１、２、３の有無を入力
-			String scanS;
+			//依頼回数を表す変数
+			String addCountstr;
+			int addCount=0;
 
-			//服の種類を選ぶ
-			System.out.println("服の種類を選んでください");
-			scanS = scan.next();
+			//オプション１をつけるかどうか判断する（０は必要１不要）
+			int option1=1;
 
-			//服コードの取得
-			if(scanS.matches("[+-]?\\d*(\\.\\d+)?")==true&&0<=clothesId&&clothesId<=8){
-				clothesId = Integer.parseInt(scanS);
+			addCountstr=scan.next();//登録回数を入力
+
+			//クリーニング依頼回数をintに直す
+			if(checkString(addCountstr))
+			{
+				System.out.println("分岐１");
+				addCount=Integer.parseInt(addCountstr);
 			}
-
-			//服コードが無効の値の場合
-			else {
-				while(scanS.matches("[+-]?\\d*(\\.\\d+)?")==false&&clothesId<=0||9<=clothesId) {
-					System.out.println("エラー：洋服のコードが見つかりません\n\n1～8までの洋服の種類で選んでください");
-					scanS = scan.next();
+			//数列に戻せなければ
+			else
+			{
+				while(checkString(addCountstr))
+				{
+					System.out.println("分岐２");
+					addCount=Integer.parseInt(addCountstr);
 				}
-				clothesId = Integer.parseInt(scanS);
 			}
+			//回数分依頼を受け付ける
+			for(int i=0;i<addCount;i++)
+			{
+				//服の番号を入力
+				System.out.println("服の番号を１～８までで入力してください");
+				clothesIdStr=scan.next();
 
-			//衣類IDが1,2の場合はオプションの１を追加させないためにカウントをアップする
-			if(clothesId==1||clothesId==2) {
-				optionCount=0;
-			}
+				//服番号が正しいか判断して正しく整数を入力するまで繰り返す
+				while(1>Integer.parseInt(clothesIdStr)||Integer.parseInt(clothesIdStr)>8)
+				{
+					System.out.println("服の番号を１～８までで入力してください");
+					clothesIdStr=scan.next();
+				}
+				//入力された服の番号をintに代入
+				clothesId=Integer.parseInt(clothesIdStr);
 
-			//オプションの有無をboolean型に直す
-			for(int j=optionCount;j<3;j++) {
-				System.out.println("オプション"+(j+1)+"を追加しますか？");
-				scanS = scan.next();
+				if(clothesId==1||clothesId==0)
+				{
+					option1=1;
+				}
 
-				if(scanS.matches("[+-]?\\d*(\\.\\d+)?")) {
-					if(Integer.parseInt(scanS)==1) {
-						optionOnOff[j]=true;
-						System.out.println("オプション"+(j+1)+"を追加しました\n");
+				//オプション１，２の有り無しを判断
+				for(int j=0+option1;j<optionJudgment.length;j++)
+				{
+					//正しい値を入力するまで繰り返す
+					while(Integer.parseInt(optionJudgmentStr)!=0||Integer.parseInt(optionJudgmentStr)!=1)
+					{
+						System.out.println("オプション"+(j+1)+"をつけるか入力してください\n0.不要\n1.必要");
+						optionJudgmentStr=scan.next();
 					}
-					else if(Integer.parseInt(scanS)==0) {}
+
+					if(Integer.parseInt(optionJudgmentStr)==1)
+					{
+						optionJudgment[j]=true;
+					}
+
+					else if(Integer.parseInt(optionJudgmentStr)==0)
+					{
+						optionJudgment[j]=false;
+					}
 				}
 
-				else {
-					System.out.println("入力ミスのためもう一度追加してください");
-					j--;
+				//オプション３の数をシミの数を入力する
+				while(Integer.parseInt(stainNumStr)<0)
+				{
+					System.out.println("オプション３によるシミの数を入力してください。\nない場合は0と入力してください");
+					stainNumStr=scan.next();
 				}
+				stainNum=Integer.parseInt(stainNumStr);
+
+
+				//ユーザID、合計金額、仕上がり日取得
+
+
+
+				//入力情報を引数の該当するものに追加
+				beforeDeposit = new BeforeDeposit(userData,clothesId,optionJudgment[0],optionJudgment[1],stainNum,totalPrice,factoryMessage);
+				beforeDepositList.add(beforeDeposit);
+				System.out.println((i+1)+"件目をリストに追加しました");
 			}
-			//ユーザID、合計金額、仕上がり日取得
+			//登録した衣類リストを確認用に表示
+			for(int i=0;i<addCount;i++) {
+				System.out.println("衣類リストだと思ってね");
 
-
-			//入力情報を引数の該当するものに追加
-			beforeDeposit = new BeforeDeposit(userId,clothesId,optionOnOff[0],optionOnOff[1],optionOnOff[2],totalPrice,factoryMessage);
-			beforeDepositList.add(beforeDeposit);
-			System.out.println((i+1)+"件目をリストに追加しました");
+			}
 		}
-		//登録した衣類リストを確認用に表示
-		for(int i=0;i<addCountInt;i++) {
-			System.out.println("衣類リストだと思ってね");
+		catch(InputMismatchException e)
+		{
+			System.out.println("エラーが発生したのでめにゅーに戻ります");
 		}
-
-		System.out.println("こちらの衣類リストを登録しますか？");
-		System.out.println("1.取り消し\n2.確定");
-		int judgment = scan.nextInt();
-
-		if (judgment == 1) {
-			System.out.println("依頼を取り消し、メニューへ戻ります");
+		catch(NumberFormatException e)
+		{
+			System.out.println("数値でないためエラーが発生したのでメニューに戻ります");
 		}
 
-		else if (judgment == 0) {
-			System.out.println("依頼を確定し、メニューへ戻ります");
-		}
 
 	}
 
@@ -199,13 +232,33 @@ public class ShopBusiness {
 	}
 
 	//メソッド使用用
-		public String format(String target, int length){
-			int byteDiff = (getByteLength(target, Charset.forName("UTF-8"))-target.length())/2;
-			return String.format("%-"+(length-byteDiff)+"s", target);
-		}
+	public String format(String target, int length){
+		int byteDiff = (getByteLength(target, Charset.forName("UTF-8"))-target.length())/2;
+		return String.format("%-"+(length-byteDiff)+"s", target);
+	}
 	//メソッド使用用
-		public int getByteLength(String string, Charset charset) {
-			return string.getBytes(charset).length;
+	public int getByteLength(String string, Charset charset) {
+		return string.getBytes(charset).length;
+	}
+	// 文字列が数値かどうか判定する関数
+	public boolean checkString(String text) {
+
+		boolean res = true;
+
+		// 受け取った文字列を先頭から1文字ずつ判定する
+		for(int i = 0; i < text.length(); i++) {
+
+			// もし数値だったら次の処理へ
+			if(Character.isDigit(text.charAt(i))) {
+				continue;
+			} else {
+				// 変数にfalseを代入して処理を終了する
+				res =  false;
+				break;
+			}
 		}
+
+		return res;
+	}
 
 }

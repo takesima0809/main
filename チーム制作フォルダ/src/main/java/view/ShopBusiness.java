@@ -92,7 +92,6 @@ public class ShopBusiness {
 			//クリーニング依頼回数をintに直す
 			if(checkString(addCountstr))
 			{
-				System.out.println("分岐１");
 				addCount=Integer.parseInt(addCountstr);
 			}
 			//数列に戻せなければ
@@ -100,9 +99,8 @@ public class ShopBusiness {
 			{
 				while(checkString(addCountstr))
 				{
-					System.out.println("分岐２");
-					addCount=Integer.parseInt(addCountstr);
 				}
+				addCount=Integer.parseInt(addCountstr);
 			}
 			//回数分依頼を受け付ける
 			for(int i=0;i<addCount;i++)
@@ -118,6 +116,7 @@ public class ShopBusiness {
 					clothesIdStr=scan.next();
 				}
 				//入力された服の番号をintに代入
+				System.out.println("q");
 				clothesId=Integer.parseInt(clothesIdStr);
 
 				if(clothesId==1||clothesId==0)

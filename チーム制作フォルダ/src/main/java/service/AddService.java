@@ -38,7 +38,6 @@ public class AddService {
 			TotalPrice totalPrice=new TotalPrice(this.shopRepository.getClothesData(beforeDeposit.getClothesData()).getPrice().toInt());
 			FinishDay finishDay=new FinishDay(this.shopRepository.getClothesData(beforeDeposit.getClothesData()).getDay().toString());
 			int finishDate=finishDay.toInt();
-			double price=0;
 			
 			//オプション計算
 			CleanOption cleanOption=new CleanOption();

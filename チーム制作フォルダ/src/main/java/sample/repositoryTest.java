@@ -3,7 +3,6 @@ package sample;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import entities.BeforeDeposit;
 import entities.DepositData;
 import entities.DepositDataList;
 import entities.UserData;
@@ -22,7 +21,7 @@ public class repositoryTest {
 		PhoneNumber phoneNumber=new PhoneNumber("0489555104");
 		UserId userId=new UserId(3);
 		UserData userData=new UserData(phoneNumber,userId,userName);
-		BeforeDeposit beforeDeposit=new BeforeDeposit(userData, 1, true, true, false,225,"1");
+		//BeforeDeposit beforeDeposit=new BeforeDeposit(userData, 1, true, true, false,225,"1");
 		ShopRepository shopRepository=new ShopRepository();
 		//RegisterInfo registerInfo=shopRepository.showAddDatas(beforeDeposit, 1).next();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

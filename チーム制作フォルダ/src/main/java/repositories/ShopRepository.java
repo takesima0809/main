@@ -204,7 +204,6 @@ public class ShopRepository {
 			preparableStatement.setString(1,"%"+depositDate+"%");
 			try(ResultSet rs =preparableStatement.executeQuery()){
 				while(rs.next()) {
-					RegisterInfo registerInfo=new RegisterInfo(setDate(rs.getString("DepositDate")),rs.getInt("DepositNumber"));
 					DepositData depositData=new DepositData(rs.getInt("DepositNumber"),rs.getString("DepositDate"), rs.getInt("UserId"),rs.getInt("ClothesId"),rs.getBoolean("WashHurryFinish"),
 							rs.getBoolean("WashDeluxeFinish"),rs.getBoolean("WashStainRemoval"),
 							rs.getInt("TotalAmount"),rs.getString("FinishDate"),rs.getString("FactoryMessage"));

@@ -32,4 +32,8 @@ public class FindService {
 	public DepositDataList deliveryDatas(int[] depositNumber) {
 		return this.shopRepository.findDepositDataList(depositNumber);
 	}
+	
+	public DepositDataList findAllData() {
+		return this.shopRepository.findAll();
+	}
 }

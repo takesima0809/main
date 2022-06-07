@@ -2,13 +2,11 @@ package sample;
 
 import java.text.ParseException;
 
+import controller.FactoryController;
 import entities.BeforeDeposit;
-import entities.DepositData;
-import entities.DepositDataList;
 import entities.UserData;
 import repositories.ShopRepository;
 import service.AddService;
-import service.FindService;
 import service.UpdataService;
 import userValues.PhoneNumber;
 import userValues.UserId;
@@ -50,25 +48,32 @@ public class repositoryTest {
 //		deleteService.deleteData(test);
 		
 		//取得
-		int[] test= {4,8,7};
-		FindService findService=new FindService();
-		DepositDataList depositDataList=findService.findDepositDatas(userId);
-		depositDataList=findService.deliveryDatas(test);
-		//depositDataList=findService.FilteringList("2022-06-07");
-		while(depositDataList.hasNext()) {
-			DepositData depositData=depositDataList.next();
-			System.out.print(depositData.getdepositNumber()+" ");
-			System.out.print(depositData.getDepositDay()+" ");
-			System.out.print(depositData.getUserId()+" ");
-			System.out.print(depositData.getClothesId()+" ");
-			System.out.print(depositData.getOption1()+" ");
-			System.out.print(depositData.getOption2()+" ");
-			System.out.print(depositData.getOption3()+" ");
-			System.out.print(depositData.getFinishDay()+" ");
-			System.out.print(depositData.getTotalPrice()+" ");
-			System.out.print(depositData.getFactoryMessage()+" ");
-			System.out.println();
-		}
+//		int[] test= {4,8,7};
+//		FindService findService=new FindService();
+//		DepositDataList depositDataList=findService.findDepositDatas(userId);
+//		depositDataList=findService.deliveryDatas(test);
+//		//depositDataList=findService.FilteringList("2022-06-07");
+//		while(depositDataList.hasNext()) {
+//			DepositData depositData=depositDataList.next();
+//			System.out.print(depositData.getdepositNumber()+" ");
+//			System.out.print(depositData.getDepositDay()+" ");
+//			System.out.print(depositData.getUserId()+" ");
+//			System.out.print(depositData.getClothesId()+" ");
+//			System.out.print(depositData.getOption1()+" ");
+//			System.out.print(depositData.getOption2()+" ");
+//			System.out.print(depositData.getOption3()+" ");
+//			System.out.print(depositData.getFinishDay()+" ");
+//			System.out.print(depositData.getTotalPrice()+" ");
+//			System.out.print(depositData.getFactoryMessage()+" ");
+//			System.out.println();
+//		}
+		
+		
+		FactoryController factoryController=new FactoryController();
+		factoryController.run();
+		
+		
+		
 		//System.out.println(shopRepository.getClothesData(7).getDay().toInt());
 		
 //		// Date型変換

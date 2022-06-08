@@ -7,29 +7,37 @@ import java.util.List;
 import java.util.Scanner;
 
 import entities.BeforeDeposit;
+import entities.RegisterInfo;
+import entities.RegisterList;
 import entities.UserData;
+import userValues.PhoneNumber;
+import userValues.UserName;
 
 public class ShopBusiness {
 	// １．お客情報会員登録
-	public void viewMemberRegistration() {
+	public UserData viewMemberRegistration() {
 		Scanner scan = new Scanner(System.in);
 		//お客様の名前入力
-		System.out.println("例にしたがってお客様の情報を登録します\nお客様氏名を入力してください\n");
-		String name = scan.next();
-
-		//お客様の電話番号入力
-		System.out.println("お客様の電話番号を入力してください");
-		String phoneNumber = scan.next();
-
-		if(phoneNumber.matches("[+-]?\\d*(\\.\\d+)?")==false){
+		System.out.println("例　氏名,123456789(電話番号)");
+		System.out.println("例にしたがってお客様の情報を入力してください");
+		String userDataString = scan.next();
+		String[]userDataArray=userDataString.split(",");
+	
+		if(userDataArray[1].matches("[+-]?\\d*(\\.\\d+)?")==false){
 			//電話番号を正しく入力するまで繰り返す
-			while(phoneNumber.matches("[+-]?\\d*(\\.\\d+)?")==false) {
+			while(userDataArray[1].matches("[+-]?\\d*(\\.\\d+)?")==false) {
 				System.out.println("電話番号を正しく入力してください");
-				phoneNumber=scan.next();
+				userDataArray[1]=scan.next();
 			}
 		}
+		
+		UserName userName=new UserName(userDataArray[0]);
+		PhoneNumber phoneNumber=new PhoneNumber(userDataArray[1]);
+		
+		UserData userData=new UserData(phoneNumber, null, userName);
+		
 		System.out.println("情報入力を完了しました\nメインメニュー画面へ戻ります");
-
+		return userData;
 	}
 
 	// ２．衣類受付依頼
@@ -80,20 +88,12 @@ public class ShopBusiness {
 		System.out.println("染み抜きオプションは染み抜き箇所入力してください");
 		System.out.println("登録回数を入力してください");
 
-		//依頼回数を表す変数
-		String addCountstr;
-		int addCount=0;
-
-		addCountstr=scan.next();//登録回数を入力
-		addCount=Integer.parseInt(addCountstr);
-
 
 		//回数分依頼を受け付ける
 		for(int i=0;i<10;i++)
 		{
 			try
 			{
-
 				//服の番号を入力
 				System.out.println("服の番号を１～８までで入力してください");
 				clothesId=Integer.parseInt(scan.next());
@@ -207,12 +207,20 @@ public class ShopBusiness {
 
 		System.out.println("上記を登録しました");
 
-
 		return beforeDepositList;
-
-
 	}
-
+	
+	public void showDepositInfo(RegisterList registerList) {
+		System.out.println("預かり番号　預かり日");
+		while(registerList.hasNext()) {
+			RegisterInfo registerInfo=registerList.next();
+			System.out.println(registerInfo.getdepositNumber()+","+registerInfo.getregistrationDate());//0埋めする
+		}
+		System.out.println("戻る場合はキーを入力してください");
+		Scanner scanner =new Scanner(System.in);
+		scanner.next();
+	}
+	
 	// ３．お渡し
 	public void viewHandOver() {
 		Scanner scan = new Scanner(System.in);

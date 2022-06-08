@@ -33,12 +33,12 @@ public class ShopBusiness {
 	}
 
 	// ２．衣類受付依頼
-	public void viewReception(BeforeDeposit beforeDeposit) {
+	public List<BeforeDeposit> viewReception() {
 		Scanner scan = new Scanner(System.in);
 
 
 		//ユーザデータ
-		UserData userData = new UserData(null,null,null);
+		UserData userData = null;
 		//服のID
 		String clothesIdStr=null;
 		int clothesId=0;
@@ -53,112 +53,86 @@ public class ShopBusiness {
 		//工場メッセージを表す
 		String factoryMessage="aaaa";
 
+		BeforeDeposit beforeDeposit=null;
+
 		List<BeforeDeposit> beforeDepositList=new ArrayList<>();
 
-		try
+
+		//ここに値段表をsysoで書く
+		System.out.println(
+				format("種類",25) + format("料金(円)",10) + "仕上がり日数\n"
+						+ format("1.ワイシャツ",25)+  format("150",10) + "3\n"
+						+ format("2.スラックス",25)+  format("200",10)  +"3\n"
+						+ format("3.ジャケット",25)+ format("350",10) + "3\n"
+						+ format("4.シャツ一般",25)+  format("200",10) + "5\n"
+						+ format("5.パンツ・スカート",25)+  format("300",10) + "5\n"
+						+ format("6.アウター一般",25)+  format("1200",10)+ "5\n"
+						+ format("7.アウターダウン",25)+  format("2500",10)+ "14\n"
+						+ format("8.毛布",25)+  format("1200",10)+ "14\n");
+		System.out.println(format("オプション１：",25)+format("特急仕上げ：",15)+"スーツ、ワイシャツのみに対応。翌日の仕上がりになります。追加料金は発生しません。");
+		System.out.println(format("オプション２：",25)+format("豪華仕上げ：",15)+"高級仕上げ、金額は通常料金の1.5倍になります。");
+		System.out.println(format("オプション３：",25)+format("染み抜き：",15)+"衣類に関係なく、一か所につき200円かかります。複数個数の時はその数だけ加算します。\n\n");
+
+		System.out.println("例に従って衣類の登録最大十件行ってください");
+		//		System.out.println("十件以下の場合「0」と入力してください");
+		System.out.println("服は番号で指定してください");
+		System.out.println("オプションに関しては「0」なし「1」あり、として入力してください");
+		System.out.println("染み抜きオプションは染み抜き箇所入力してください");
+		System.out.println("登録回数を入力してください");
+
+		//依頼回数を表す変数
+		String addCountstr;
+		int addCount=0;
+
+		addCountstr=scan.next();//登録回数を入力
+		addCount=Integer.parseInt(addCountstr);
+
+
+		//回数分依頼を受け付ける
+		for(int i=0;i<10;i++)
 		{
-			//ここに値段表をsysoで書く
-			System.out.println(
-					format("種類",25) + format("料金(円)",10) + "仕上がり日数\n"
-							+ format("1.ワイシャツ",25)+  format("150",10) + "3\n"
-							+ format("2.スラックス",25)+  format("200",10)  +"3\n"
-							+ format("3.ジャケット",25)+ format("350",10) + "3\n"
-							+ format("4.シャツ一般",25)+  format("200",10) + "5\n"
-							+ format("5.パンツ・スカート",25)+  format("300",10) + "5\n"
-							+ format("6.アウター一般",25)+  format("1200",10)+ "5\n"
-							+ format("7.アウターダウン",25)+  format("2500",10)+ "14\n"
-							+ format("8.毛布",25)+  format("1200",10)+ "14\n");
-			System.out.println(format("オプション１：",25)+format("特急仕上げ：",15)+"スーツ、ワイシャツのみに対応。翌日の仕上がりになります。追加料金は発生しません。");
-			System.out.println(format("オプション２：",25)+format("豪華仕上げ：",15)+"高級仕上げ、金額は通常料金の1.5倍になります。");
-			System.out.println(format("オプション３：",25)+format("染み抜き：",15)+"衣類に関係なく、一か所につき200円かかります。複数個数の時はその数だけ加算します。\n\n");
-
-			System.out.println("例に従って衣類の登録最大十件行ってください");
-			//		System.out.println("十件以下の場合「0」と入力してください");
-			System.out.println("服は番号で指定してください");
-			System.out.println("オプションに関しては「0」なし「1」あり、として入力してください");
-			System.out.println("染み抜きオプションは染み抜き箇所入力してください");
-			System.out.println("登録回数を入力してください");
-
-			//依頼回数を表す変数
-			String addCountstr;
-			int addCount=0;
-
-			addCountstr=scan.next();//登録回数を入力
-			addCount=Integer.parseInt(addCountstr);
-			
-			
-			if(addCount<=0||9<=addCount)
+			try
 			{
-<<<<<<< HEAD
-				addCount=Integer.parseInt(addCountstr);
-			}
-			//数列に戻せなければ
-			else
-			{
-				while(checkString(addCountstr))
-				{
-=======
-				while(1<=addCount&&addCount<=8)
-				{
-					addCountstr=scan.next();
-					addCount=Integer.parseInt(addCountstr);
->>>>>>> k.sub2
-				}
-				addCount=Integer.parseInt(addCountstr);
-			}
-			
-			
-			//回数分依頼を受け付ける
-			for(int i=0;i<addCount;i++)
-			{
+
 				//服の番号を入力
 				System.out.println("服の番号を１～８までで入力してください");
-				clothesIdStr=scan.next();
-<<<<<<< HEAD
+				clothesId=Integer.parseInt(scan.next());
 
-				//服番号が正しいか判断して正しく整数を入力するまで繰り返す
-				while(1>Integer.parseInt(clothesIdStr)||Integer.parseInt(clothesIdStr)>8)
+
+				while(clothesId<=0||9<=clothesId)
 				{
-					System.out.println("服の番号を１～８までで入力してください");
-					clothesIdStr=scan.next();
+					System.out.println("服の番号を１～８の番号を入力してください");
+					clothesId=Integer.parseInt(scan.next());
 				}
-				//入力された服の番号をintに代入
-				System.out.println("q");
-=======
->>>>>>> k.sub2
-				clothesId=Integer.parseInt(clothesIdStr);
 
-
-				//服番号が正しいか判断して正しく整数を入力するまで繰り返す
-				//				while(Integer.parseInt(clothesIdStr)<0||8<Integer.parseInt(clothesIdStr))
-				//				{
-				//					System.out.println("服の番号を１～８までで入力してください");
-				//					clothesIdStr=scan.next();
-				//				}
-				//入力された服の番号をintに代入
-				//				clothesId=Integer.parseInt(clothesIdStr);
 
 				if(clothesId==1||clothesId==2)
 				{
 
 					//オプション１の有り無しを判断
-
-					System.out.println("オプション１をつけるか入力してください\n1.不要\n2.必要");
+					System.out.println("オプション１をつけるか入力してください\n1.はい\n2.いいえ");
 					optionJudgmentStr=scan.next();
 
-					if(Integer.parseInt(optionJudgmentStr)==1)
+					while(!(optionJudgmentStr.equals("1")||optionJudgmentStr.equals("2")))//訂正
 					{
-						optionJudgment[0]=true;
-					}
 
-					else if(Integer.parseInt(optionJudgmentStr)==0)
-					{
-						optionJudgment[0]=false;
+						System.out.println("正しい値を入力してください\n1.はい\n2.いいえ");
+						optionJudgmentStr=scan.next();
+
+						if(optionJudgmentStr.equals("1"))
+						{
+							optionJudgment[0]=true;
+						}
+
+						else if(optionJudgmentStr.equals("2"))
+						{
+							optionJudgment[0]=false;
+						}
 					}
 				}
 				//オプション２の有り無しを判断
 
-				System.out.println("オプション２をつけるか入力してください\n1.不要\n2.必要");
+				System.out.println("オプション２をつけるか入力してください\n1.はい\n2.いいえ");
 				optionJudgmentStr=scan.next();
 
 				if(Integer.parseInt(optionJudgmentStr)==1)
@@ -171,35 +145,70 @@ public class ShopBusiness {
 					optionJudgment[1]=false;
 				}
 
+				while(!(optionJudgmentStr.equals("1")||optionJudgmentStr.equals("2")))//訂正
+				{
+
+					System.out.println("正しい値を入力してください\n1.はい\n2.いいえ");
+					optionJudgmentStr=scan.next();
+
+					if(optionJudgmentStr.equals("1"))
+					{
+						optionJudgment[1]=true;
+					}
+
+					else if(optionJudgmentStr.equals("2"))
+					{
+						optionJudgment[1]=false;
+					}
+				}
+
 
 				//オプション３の数をシミの数を入力する
 				System.out.println("オプション３によるシミの数を入力してください。\nない場合は0と入力してください");
-				stainNumStr=scan.next();
+				stainNum=Integer.parseInt(scan.next());
 
-
-				stainNum=Integer.parseInt(stainNumStr);
 
 				//入力情報を引数の該当するものに追加
 				beforeDeposit = new BeforeDeposit(userData,clothesId,optionJudgment[0],optionJudgment[1],stainNum,totalPrice,factoryMessage);
 				beforeDepositList.add(beforeDeposit);
-				System.out.println((i+1)+"件目をリストに追加しました");
+				System.out.println((i+1)+"件目をリストに追加しました\n");
+
+				System.out.println("次の追加をしますか？\n1.はい\nいいえの場合はそれ以外の値を入力してください");
+
+
+				if(!(scan.next().equals("1")))
+				{
+					break;
+				}
 			}
-			//登録した衣類リストを確認用に表示
-			for(int i=0;i<addCount;i++) 
+			catch(InputMismatchException e)
 			{
-				System.out.println("衣類リスト");
+				System.out.println("エラーが発生したのでもう一度入力してください");
+				i--;
 			}
+			catch(NumberFormatException e)
+			{
+				System.out.println("エラーが発生したのでもう一度入力してください");
+				i--;
+			}
+
 		}
-		catch(InputMismatchException e)
+		//登録した衣類リストを確認用に表示
+		//ヘッダーを記入する
+		for(int i=0;i<beforeDepositList.size();i++) 
 		{
-			System.out.println("エラーが発生したのでメニューに戻ります");
-			beforeDepositList.clear();;
+			beforeDeposit=beforeDepositList.get(i);
+
+			System.out.print(beforeDeposit.getClothesData()+",");
+			System.out.print(beforeDeposit.getCleanOption1()+",");
+			System.out.print(beforeDeposit.getCleanOption2()+",");
+			System.out.println(beforeDeposit.getCleanOption3());		
 		}
-		catch(NumberFormatException e)
-		{
-			System.out.println("数値でないためエラーが発生したのでメニューに戻ります");
-			beforeDepositList.clear();
-		}
+
+		System.out.println("上記を登録しました");
+
+
+		return beforeDepositList;
 
 
 	}

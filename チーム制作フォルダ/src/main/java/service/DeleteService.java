@@ -1,5 +1,7 @@
 package service;
 
+import java.sql.SQLException;
+
 import repositories.ShopRepository;
 
 public class DeleteService {
@@ -10,7 +12,7 @@ public class DeleteService {
 	}
 
 	//データ削除
-	public void deleteData(int[] depositNumber) {
+	public void deleteData(int[] depositNumber) throws SQLException {
 		this.shopRepository.DeleteDepositData(depositNumber);
 	}
 }

@@ -1,7 +1,10 @@
 package service;
 
-import clothesValues.ClothesId;
+import java.sql.SQLException;
+import java.util.List;
+
 import entities.DepositDataList;
+import entities.viewClothesData;
 import repositories.ShopRepository;
 import userValues.UserId;
 
@@ -12,8 +15,12 @@ public class FindService {
 	}
 	
 	//衣服データを返す(いらないかも)
-	public void findClothesDatas(ClothesId clothesId) {
-		this.shopRepository.getClothesData(clothesId.toInt());
+//	public void findClothesDatas(ClothesId clothesId) {
+//		this.shopRepository.getClothesData(clothesId.toInt());
+//	}
+	
+	public List<viewClothesData> findClothesDatas() {
+		return this.shopRepository.getClothesData();
 	}
 	
 	//受付時の追加データ表示
@@ -29,7 +36,7 @@ public class FindService {
 	}
 	
 	//お渡しする（削除する）データ
-	public DepositDataList deliveryDatas(int[] depositNumber) {
+	public DepositDataList deliveryDatas(int[] depositNumber) throws SQLException {
 		return this.shopRepository.findDepositDataList(depositNumber);
 	}
 	

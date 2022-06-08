@@ -5,12 +5,18 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import entities.BeforeDeposit;
+import entities.DepositData;
+import entities.DepositDataList;
 import entities.RegisterInfo;
 import entities.RegisterList;
 import entities.UserData;
+import entities.viewClothesData;
 import userValues.PhoneNumber;
+import userValues.UserId;
 import userValues.UserName;
 
 public class ShopBusiness {
@@ -22,7 +28,7 @@ public class ShopBusiness {
 		System.out.println("例にしたがってお客様の情報を入力してください");
 		String userDataString = scan.next();
 		String[]userDataArray=userDataString.split(",");
-	
+
 		if(userDataArray[1].matches("[+-]?\\d*(\\.\\d+)?")==false){
 			//電話番号を正しく入力するまで繰り返す
 			while(userDataArray[1].matches("[+-]?\\d*(\\.\\d+)?")==false) {
@@ -30,18 +36,18 @@ public class ShopBusiness {
 				userDataArray[1]=scan.next();
 			}
 		}
-		
+
 		UserName userName=new UserName(userDataArray[0]);
 		PhoneNumber phoneNumber=new PhoneNumber(userDataArray[1]);
-		
+
 		UserData userData=new UserData(phoneNumber, null, userName);
-		
+
 		System.out.println("情報入力を完了しました\nメインメニュー画面へ戻ります");
 		return userData;
 	}
 
 	// ２．衣類受付依頼
-	public List<BeforeDeposit> viewReception() {
+	public List<BeforeDeposit> viewReception(List<viewClothesData>list) {
 		Scanner scan = new Scanner(System.in);
 
 
@@ -67,16 +73,25 @@ public class ShopBusiness {
 
 
 		//ここに値段表をsysoで書く
-		System.out.println(
-				format("種類",25) + format("料金(円)",10) + "仕上がり日数\n"
-						+ format("1.ワイシャツ",25)+  format("150",10) + "3\n"
-						+ format("2.スラックス",25)+  format("200",10)  +"3\n"
-						+ format("3.ジャケット",25)+ format("350",10) + "3\n"
-						+ format("4.シャツ一般",25)+  format("200",10) + "5\n"
-						+ format("5.パンツ・スカート",25)+  format("300",10) + "5\n"
-						+ format("6.アウター一般",25)+  format("1200",10)+ "5\n"
-						+ format("7.アウターダウン",25)+  format("2500",10)+ "14\n"
-						+ format("8.毛布",25)+  format("1200",10)+ "14\n");
+		for(int i=0;i<list.size();i++) {
+			viewClothesData viewClothesData=list.get(i);
+			System.out.print(viewClothesData.getClothesId());
+			System.out.print(viewClothesData.getClothesName());
+			System.out.print(viewClothesData.getPrice());
+			System.out.print(viewClothesData.getFinishDay());
+			System.out.println();
+		}
+
+		//		System.out.println(
+		//				format("種類",25) + format("料金(円)",10) + "仕上がり日数\n"
+		//						+ format("1.ワイシャツ",25)+  format("150",10) + "3\n"
+		//						+ format("2.スラックス",25)+  format("200",10)  +"3\n"
+		//						+ format("3.ジャケット",25)+ format("350",10) + "3\n"
+		//						+ format("4.シャツ一般",25)+  format("200",10) + "5\n"
+		//						+ format("5.パンツ・スカート",25)+  format("300",10) + "5\n"
+		//						+ format("6.アウター一般",25)+  format("1200",10)+ "5\n"
+		//						+ format("7.アウターダウン",25)+  format("2500",10)+ "14\n"
+		//						+ format("8.毛布",25)+  format("1200",10)+ "14\n");
 		System.out.println(format("オプション１：",25)+format("特急仕上げ：",15)+"スーツ、ワイシャツのみに対応。翌日の仕上がりになります。追加料金は発生しません。");
 		System.out.println(format("オプション２：",25)+format("豪華仕上げ：",15)+"高級仕上げ、金額は通常料金の1.5倍になります。");
 		System.out.println(format("オプション３：",25)+format("染み抜き：",15)+"衣類に関係なく、一か所につき200円かかります。複数個数の時はその数だけ加算します。\n\n");
@@ -94,6 +109,13 @@ public class ShopBusiness {
 		{
 			try
 			{
+				//useridの番号を入力
+				System.out.println("ユーザIDを入力してください");
+				String id=scan.next();
+
+				UserId userId=new UserId(Integer.parseInt(id));
+				userData=new UserData(null, userId, null);
+
 				//服の番号を入力
 				System.out.println("服の番号を１～８までで入力してください");
 				clothesId=Integer.parseInt(scan.next());
@@ -173,13 +195,7 @@ public class ShopBusiness {
 				beforeDepositList.add(beforeDeposit);
 				System.out.println((i+1)+"件目をリストに追加しました\n");
 
-				System.out.println("次の追加をしますか？\n1.はい\nいいえの場合はそれ以外の値を入力してください");
-
-
-				if(!(scan.next().equals("1")))
-				{
-					break;
-				}
+				
 			}
 			catch(InputMismatchException e)
 			{
@@ -191,7 +207,13 @@ public class ShopBusiness {
 				System.out.println("エラーが発生したのでもう一度入力してください");
 				i--;
 			}
+			System.out.println("次の追加をしますか？\n1.はい\nいいえの場合はそれ以外の値を入力してください");
 
+
+			if(!(scan.next().equals("1")))
+			{
+				break;
+			}
 		}
 		//登録した衣類リストを確認用に表示
 		//ヘッダーを記入する
@@ -209,7 +231,7 @@ public class ShopBusiness {
 
 		return beforeDepositList;
 	}
-	
+
 	public void showDepositInfo(RegisterList registerList) {
 		System.out.println("預かり番号　預かり日");
 		while(registerList.hasNext()) {
@@ -220,54 +242,91 @@ public class ShopBusiness {
 		Scanner scanner =new Scanner(System.in);
 		scanner.next();
 	}
-	
-	// ３．お渡し
-	public void viewHandOver() {
+
+	// ３．お渡し入力
+	public int[] viewHandOver() {
 		Scanner scan = new Scanner(System.in);
-		String handOverCount;
+		String[] handOverCount;
 
-		System.out.println("仕上がり済みのお預かり番号を最大十件入力してください");
+		System.out.println("仕上がり済みの4桁のお預かり番号をカンマ区切りで最大十件入力してください");
+		System.out.println("例・・・");
 		System.out.println("仕上がり済みのお預かり番号が見つからない場合エラーとなります");
-		System.out.println("入力回数を入力してください");
-		handOverCount=scan.next();
 
+		handOverCount=scan.next().split(",");
+		int[] depositNumbers= {0,0,0,0,0,0,0,0,0,0};
 
-		for (int i = 0; i < Integer.parseInt(handOverCount); i++) {
+		for (int i = 0; i <handOverCount.length; i++) {
+			
 
-			String clothesNamber = null;
-
-			if(clothesNamber.matches("[+-]?\\d*(\\.\\d+)?")==false&&Integer.parseInt(clothesNamber)<10000)
+			if(handOverCount[i].matches("[+-]?\\d*(\\.\\d+)?")==false&&!(handOverCount[i].length()==4))
 			{
-
+				System.out.println("エラー：見つかりませんでした");
+				return depositNumbers;
 			}
-			System.out.println("エラー：見つかりませんでした");
-
-
 		}
+		
+		for(int i=0;i<handOverCount.length;i++) {
+			String str = handOverCount[i];
+			Pattern p = Pattern.compile("^0+([0-9]+.*)");
+			Matcher m = p.matcher(str);
+			if (m.matches()) {
+				depositNumbers[i]=Integer.parseInt(m.group(1));
+			}
+		}
+		
+		return depositNumbers;
 
+	}
+	
+	public boolean viewDepositList(DepositDataList depositDataList) {
+		while(depositDataList.hasNext()) {
+			DepositData depositData=depositDataList.next();
+			System.out.print(depositData.getdepositNumber());
+			System.out.print(depositData.getDepositDay());
+			System.out.print(depositData.getUserId());
+			System.out.print(depositData.getClothesId());
+			System.out.println();
+		}
+		
 		System.out.println("こちらの一覧をお客様にお渡ししますか？");
-		System.out.println("1.取り消し\n2.確定");
+		System.out.println("1.確定\n2.取り消し");
+		Scanner scan=new Scanner(System.in);
 		int judgment = scan.nextInt();
 
 		if (judgment == 1) {
-			System.out.println("お渡しを取り消し、メニューへ戻ります");
-		}
-
-		else if (judgment == 0) {
 			System.out.println("お渡しして、メニューへ戻ります");
+			return true;
 		}
-
+		else if (judgment == 0) {
+			System.out.println("取り消します。メニューへ戻ります");
+			return false;
+		}
+		System.out.println("値が不正です。取り消ししメニューに戻ります");
+		return false;
 	}
 
-	// ４．預かり一覧表示
-	public void viewCustodyList() {
+	// ４．預かり一覧(ユーザID入力)
+	public UserId inputUserId() {
+		System.out.println("ユーザIDを入力してください");
 		Scanner scan = new Scanner(System.in);
-		// 預かり一覧表示処理
-		System.out.println("預かり一覧だと思ってね");
-		System.out.println("よろしければエンターを押してください");
-		scan.nextLine();
-		System.out.println("メニューへ戻ります");
-
+		UserId userId=new UserId(scan.nextInt());
+		return userId;
+	}
+	
+	public void viewDepositListToUserId(DepositDataList depositDataList) {
+		while(depositDataList.hasNext()) {
+			DepositData depositData=depositDataList.next();
+			System.out.print(depositData.getdepositNumber());
+			System.out.print(depositData.getDepositDay());
+			System.out.print(depositData.getUserId());
+			System.out.print(depositData.getClothesId());
+			System.out.print(depositData.getOption1());
+			System.out.print(depositData.getOption2());
+			System.out.print(depositData.getOption3());
+			System.out.print(depositData.getFinishDay());
+			System.out.print(depositData.getFactoryMessage());
+			System.out.println();
+		}
 	}
 
 	//メソッド使用用

@@ -47,7 +47,7 @@ public class AddService {
 			
 			// Date型変換
 			Date date=new Date();
-			Date formatDate=sdf.parse(beforeDeposit.getFinishDay());
+			//Date formatDate=sdf.parse(beforeDeposit.getFinishDay());
 			
 			//カレンダー型
 			Calendar cdr =Calendar.getInstance();

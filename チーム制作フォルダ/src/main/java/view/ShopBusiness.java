@@ -57,8 +57,8 @@ public class ShopBusiness {
 		//ユーザデータ
 		UserData userData = null;
 		//服のID
-		String clothesIdStr=null;
-		int clothesId=0;
+		String clothesId=null;
+		int clothesIdInt;
 		//オプション1,2の有無を表すboolean配列
 		boolean[] optionJudgment = {false,false};
 		String optionJudgmentStr = "0";
@@ -115,23 +115,31 @@ public class ShopBusiness {
 				//useridの番号を入力
 				System.out.println("ユーザIDを入力してください");
 				String id=scan.next();
+				
+				
+				while(id.matches("[+-]?\\d*(\\.\\d+)?")==false) {
+					System.out.println("ユーザIDを入力してください");
+					id=scan.next();
+				}
 
 				UserId userId=new UserId(Integer.parseInt(id));
 				userData=new UserData(null, userId, null);
 
 				//服の番号を入力
 				System.out.println("服の番号を１～８までで入力してください");
-				clothesId=Integer.parseInt(scan.next());
+				clothesId=scan.next();
 
 
-				while(clothesId<=0||9<=clothesId)
+				while(Integer.parseInt(clothesId)<=0||9<=Integer.parseInt(clothesId)||clothesId.matches("[+-]?\\d*(\\.\\d+)?")==false)
 				{
 					System.out.println("服の番号を１～８の番号を入力してください");
-					clothesId=Integer.parseInt(scan.next());
+					clothesId=scan.next();
 				}
+				
+				clothesIdInt=Integer.parseInt(clothesId);
 
 
-				if(clothesId==1||clothesId==2)
+				if(clothesId.equals("1")||clothesId.equals("2"))
 				{
 
 					//オプション１の有り無しを判断
@@ -148,7 +156,7 @@ public class ShopBusiness {
 						optionJudgment[0]=false;
 					}
 
-					while(!(optionJudgmentStr.equals("1")||optionJudgmentStr.equals("2")))//訂正
+					while(!(optionJudgmentStr.equals("1")||optionJudgmentStr.equals("2"))||!(optionJudgmentStr.matches("[+-]?\\d*(\\.\\d+)?")))//訂正
 					{
 
 						System.out.println("正しい値を入力してください\n1.はい\n2.いいえ");
@@ -180,7 +188,7 @@ public class ShopBusiness {
 					optionJudgment[1]=false;
 				}
 
-				while(!(optionJudgmentStr.equals("1")||optionJudgmentStr.equals("2")))//訂正
+				while(!(optionJudgmentStr.equals("1")||optionJudgmentStr.equals("2"))||!(optionJudgmentStr.matches("[+-]?\\d*(\\.\\d+)?")))//訂正
 				{
 
 					System.out.println("正しい値を入力してください\n1.はい\n2.いいえ");
@@ -204,7 +212,7 @@ public class ShopBusiness {
 
 
 				//入力情報を引数の該当するものに追加
-				beforeDeposit = new BeforeDeposit(userData,clothesId,optionJudgment[0],optionJudgment[1],stainNum,totalPrice,factoryMessage);
+				beforeDeposit = new BeforeDeposit(userData,clothesIdInt,optionJudgment[0],optionJudgment[1],stainNum,totalPrice,factoryMessage);
 				beforeDepositList.add(beforeDeposit);
 				System.out.println((i+1)+"件目をリストに追加しました\n");
 
@@ -230,14 +238,15 @@ public class ShopBusiness {
 		}
 		//登録した衣類リストを確認用に表示
 		//ヘッダーを記入する
+		System.out.println("衣類番号  オプション１  オプション２  オプション３");
 		for(int i=0;i<beforeDepositList.size();i++) 
 		{
 			beforeDeposit=beforeDepositList.get(i);
 
-			System.out.print(beforeDeposit.getClothesData()+",");
-			System.out.print(beforeDeposit.getCleanOption1()+",");
-			System.out.print(beforeDeposit.getCleanOption2()+",");
-			System.out.println(beforeDeposit.getCleanOption3());		
+			System.out.print(beforeDeposit.getClothesData());
+			System.out.print(String.format("%13b",beforeDeposit.getCleanOption1()));
+			System.out.print(String.format("%14b",beforeDeposit.getCleanOption2()));
+			System.out.println(String.format("%14b",beforeDeposit.getCleanOption3()));		
 		}
 
 		System.out.println("上記を登録しました");
@@ -246,10 +255,10 @@ public class ShopBusiness {
 	}
 
 	public void showDepositInfo(RegisterList registerList) {
-		System.out.println("預かり番号　預かり日");
+		System.out.println("預かり番号  預かり日時");
 		while(registerList.hasNext()) {
 			RegisterInfo registerInfo=registerList.next();
-			System.out.println(registerInfo.getdepositNumber()+","+registerInfo.getregistrationDate());//0埋めする
+			System.out.println(registerInfo.getdepositNumber()+"          "+registerInfo.getregistrationDate());//0埋めする
 		}
 		System.out.println("戻る場合はキーを入力してください");
 		Scanner scanner =new Scanner(System.in);
@@ -269,9 +278,7 @@ public class ShopBusiness {
 		int[] depositNumbers= {0,0,0,0,0,0,0,0,0,0};
 
 		for (int i = 0; i <handOverCount.length; i++) {
-
-
-			if(handOverCount[i].matches("[+-]?\\d*(\\.\\d+)?")==false&&!(handOverCount[i].length()==4))
+			if(handOverCount[i].matches("[+-]?\\d*(\\.\\d+)?")==false||!(handOverCount[i].length()==4))
 			{
 				System.out.println("エラー：見つかりませんでした");
 				return depositNumbers;
@@ -304,13 +311,13 @@ public class ShopBusiness {
 		System.out.println("こちらの一覧をお客様にお渡ししますか？");
 		System.out.println("1.確定\n2.取り消し");
 		Scanner scan=new Scanner(System.in);
-		int judgment = scan.nextInt();
+		String judgment = scan.next();
 
-		if (judgment == 1) {
+		if (judgment.equals("1")) {
 			System.out.println("お渡しして、メニューへ戻ります");
 			return true;
 		}
-		else if (judgment == 0) {
+		else if (judgment.equals("2")) {
 			System.out.println("取り消します。メニューへ戻ります");
 			return false;
 		}
@@ -322,12 +329,19 @@ public class ShopBusiness {
 	public UserId inputUserId() {
 		System.out.println("ユーザIDを入力してください");
 		Scanner scan = new Scanner(System.in);
-		UserId userId=new UserId(scan.nextInt());
+		UserId userId=null;
+		try {
+		userId=new UserId(scan.nextInt());
+		}
+		catch(Exception e) {
+			System.out.println("値が不正です");
+		}
+		
 		return userId;
 	}
 
 	public void viewDepositListToUserId(DepositDataList depositDataList) {
-		System.out.println("ユーザID  お預かり日  お預かり時間  オプション1,2,3,の有無  お渡し予定日  工場からのメッセージ");
+		System.out.println("ユーザID  お預かり日  お預かり時間  オプション1,2,3の有無  お渡し予定日  工場からのメッセージ");
 		while(depositDataList.hasNext()) {
 			DepositData depositData=depositDataList.next();
 			System.out.print(String.format("%2d",depositData.getdepositNumber())+"  ");

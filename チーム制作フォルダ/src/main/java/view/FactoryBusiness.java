@@ -1,5 +1,6 @@
 package view;
 
+import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
@@ -33,28 +34,32 @@ public class FactoryBusiness {
 
 	// 工場の預かり一覧表示画面
 	public void viewClothesList(DepositDataList depositDataList) {
+		System.out.println("お預かり番号　預かり日　ユーザID　衣服ID　特急仕上げ　デラックス仕上げ　染み抜き個数　仕上がり予定日　工場からのメッセージ");
 		while(depositDataList.hasNext()) {
 			DepositData depositData=depositDataList.next();
-			System.out.print(depositData.getdepositNumber()+" ");
-			System.out.print(depositData.getDepositDay()+" ");
-			System.out.print(depositData.getUserId()+" ");
-			System.out.print(depositData.getClothesId()+" ");
-			System.out.print(depositData.getOption1()+" ");
-			System.out.print(depositData.getOption2()+" ");
-			System.out.print(depositData.getOption3()+" ");
-			System.out.print(depositData.getFinishDay()+" ");
-			System.out.print(depositData.getTotalPrice()+" ");
-			System.out.print(depositData.getFactoryMessage()+" ");
+			System.out.print(String.format("%-3d",depositData.getdepositNumber()));
+			System.out.print(String.format("%-22s",depositData.getDepositDay()));
+			System.out.print(String.format("%-4d",depositData.getUserId()));
+			System.out.print(String.format("%-4d",depositData.getClothesId()));
+			System.out.print(String.format("%-9s",depositData.getOption1()));
+			System.out.print(String.format("%-9s",depositData.getOption2()));
+			System.out.print(String.format("%-9s",depositData.getOption3()));
+			System.out.print(format(depositData.getFinishDay(),15));
+			if(depositData.getFactoryMessage()==null) {
+				System.out.print(String.format("%6s",depositData.getFactoryMessage()));
+			}else {
+				System.out.print("　"+depositData.getFactoryMessage());
+			}
 			System.out.println();
 		}
 
 		System.out.println("検索結果を表示しました");
 		System.out.println();
 	}
-
+//絞り込み日入力画面
 	public String selectDate() {
 		Scanner scan = new Scanner(System.in);
-		System.out.println("絞り込む日にちを入力してください");
+		System.out.println("絞り込む日にちを入力してください　戻る場合はEXITと入力してください");
 		System.out.println("例　2022-01-01");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		sdf.setLenient(false);
@@ -62,7 +67,10 @@ public class FactoryBusiness {
 		String date=null;
 
 		while(!formatCheck) {   	
-			date = scan.next();//入力    
+			date = scan.next();//入力  
+			if(date.equals("EXIT")) {
+				return null;
+			}
 			try{
 				sdf.parse(date);//正しい日付
 				formatCheck=true;
@@ -77,19 +85,22 @@ public class FactoryBusiness {
 	// 絞り込み預かり一覧の表示画面
 	public void viewSelectClothesList(DepositDataList depositDataList) {
 		if(depositDataList.size()!=0) {
-
+			System.out.println("お預かり番号　預かり日　ユーザID　衣服ID　特急仕上げ　デラックス仕上げ　染み抜き個数　仕上がり予定日　工場からのメッセージ");
 			while(depositDataList.hasNext()) {
 				DepositData depositData=depositDataList.next();
-				System.out.print(depositData.getdepositNumber()+" ");
-				System.out.print(depositData.getDepositDay()+" ");
-				System.out.print(depositData.getUserId()+" ");
-				System.out.print(depositData.getClothesId()+" ");
-				System.out.print(depositData.getOption1()+" ");
-				System.out.print(depositData.getOption2()+" ");
-				System.out.print(depositData.getOption3()+" ");
-				System.out.print(depositData.getFinishDay()+" ");
-				System.out.print(depositData.getTotalPrice()+" ");
-				System.out.print(depositData.getFactoryMessage()+" ");
+				System.out.print(String.format("%-3d",depositData.getdepositNumber()));
+				System.out.print(String.format("%-22s",depositData.getDepositDay()));
+				System.out.print(String.format("%-4d",depositData.getUserId()));
+				System.out.print(String.format("%-4d",depositData.getClothesId()));
+				System.out.print(String.format("%-9s",depositData.getOption1()));
+				System.out.print(String.format("%-9s",depositData.getOption2()));
+				System.out.print(String.format("%-9s",depositData.getOption3()));
+				System.out.print(format(depositData.getFinishDay(),15));
+				if(depositData.getFactoryMessage()==null) {
+					System.out.print(String.format("%6s",depositData.getFactoryMessage()));
+				}else {
+					System.out.print("　"+depositData.getFactoryMessage());
+				}
 				System.out.println();
 			}
 			// 絞り込み後の預かり一覧の表示
@@ -102,10 +113,13 @@ public class FactoryBusiness {
 
 	// メッセージ入力画面
 	public String[] writeMassage() {
-		System.out.println("メッセージを記入する衣類のお預かり番号とメッセージを入力してください");
+		System.out.println("4桁のお預かり番号とメッセージを入力してください　戻る場合はEXITと入力してください");
 		Scanner scan = new Scanner(System.in);
 		String scanStr = scan.next();
 		String[]strings=scanStr.split(",");
+		if(scanStr.equals("EXIT")) {
+			return null;
+		}
 		if(strings.length!=2) {
 			return null;
 		}
@@ -135,12 +149,15 @@ public class FactoryBusiness {
 
 	// お渡し予定日の変更画面
 	public String[] cangeHandOverDay() {
-		System.out.println("メッセージを記入する衣類のお預かり番号と変更後の日時を入力してください");
+		System.out.println("メッセージを記入する衣類のお預かり番号と変更後の日時を入力してください　戻る場合はEXITと入力してください");
 		System.out.println("例：お預かり番号(四桁),変更後のお渡し日(YYYY-MM-DD)");
 
 		Scanner scan = new Scanner(System.in);
 		String scanStr = scan.next();
 		String[]strings=scanStr.split(",");
+		if(scanStr.equals("EXIT")) {
+			return null;
+		}
 		if(strings.length!=2) {
 			return null;
 		}
@@ -188,5 +205,13 @@ public class FactoryBusiness {
 		return strings;
 
 	}
-
+	//メソッド使用用
+		public String format(String target, int length){
+			int byteDiff = (getByteLength(target, Charset.forName("UTF-8"))-target.length())/2;
+			return String.format("%-"+(length-byteDiff)+"s", target);
+		}
+		//メソッド使用用
+		public int getByteLength(String string, Charset charset) {
+			return string.getBytes(charset).length;
+		}
 }

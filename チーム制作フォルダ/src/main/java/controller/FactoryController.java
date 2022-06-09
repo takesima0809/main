@@ -26,7 +26,10 @@ public class FactoryController {
 				break;
 			}
 			case 2: {
-				factoryBusiness.viewSelectClothesList(findService.FilteringList(String.valueOf(factoryBusiness.selectDate())));
+				String filteringDate = factoryBusiness.selectDate();
+				if(filteringDate!=null) {
+					factoryBusiness.viewSelectClothesList(findService.FilteringList(filteringDate));
+				}
 				break;
 			}
 			case 3: {

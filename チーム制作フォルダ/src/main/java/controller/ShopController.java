@@ -2,6 +2,7 @@ package controller;
 
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.List;
 
 import entities.UserData;
 import service.AddService;
@@ -43,7 +44,7 @@ public class ShopController {
 				this.shopBusiness.showDepositInfo(this.addService.ClothesReception(this.shopBusiness.viewReception(findService.findClothesDatas())));
 				break;
 			case 3:
-				int[] deleteNumber=shopBusiness.viewHandOver();
+				List<Integer> deleteNumber=shopBusiness.viewHandOver();
 				if(this.shopBusiness.viewDepositList(findService.deliveryDatas(deleteNumber))) {
 					deleteService.deleteData(deleteNumber);
 				}

@@ -9,7 +9,7 @@ public class MainTest {
 		// TODO 自動生成されたメソッド・スタブ
 		final FactoryController factoryController = new FactoryController();
 		final ShopController shopController = new ShopController();
-		shopController .run();
+		shopController.run();
 	}
 
 }

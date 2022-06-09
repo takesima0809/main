@@ -28,7 +28,7 @@ public class AddService {
 		UserName username = new UserName(name);
 		PhoneNumber usernamber = new PhoneNumber(PhoneNamber);
 		UserData userData = new UserData(usernamber, null, username);
-		this.shopRepository.witeUserDatas(userData);
+		this.shopRepository.writeUserDatas(userData);
 	}
 
 	//受付登録
@@ -72,7 +72,7 @@ public class AddService {
 			}
 			
 			//3
-			totalPrice=new TotalPrice(cleanOption.washStainRemoval(totalPrice,beforeDeposit.getCleanOption3()));
+			totalPrice=new TotalPrice(cleanOption.washStainRemoval(totalPrice.toInt(),beforeDeposit.getCleanOption3()));
 			
 			beforeDeposit.setFinishDay(String.valueOf(string));
 			beforeDeposit.setTotalPrice(totalPrice.toInt());

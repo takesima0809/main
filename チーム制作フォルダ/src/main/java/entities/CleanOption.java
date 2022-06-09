@@ -1,7 +1,6 @@
 package entities;
 
 import clothesValues.WaitDay;
-import values.TotalPrice;
 
 public class CleanOption {
 	//特急仕上げ
@@ -16,8 +15,8 @@ public class CleanOption {
 	}
 	
 	//染抜き
-	public int washStainRemoval(TotalPrice price,int count) {
-		return price.toInt()+(count*200);
+	public int washStainRemoval(int price,int count) {
+		return price+(count*200);
 	}
 		
 }

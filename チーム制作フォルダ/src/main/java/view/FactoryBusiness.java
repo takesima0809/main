@@ -3,6 +3,8 @@ package view;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import entities.DepositData;
 import entities.DepositDataList;
@@ -21,23 +23,12 @@ public class FactoryBusiness {
 		System.out.println("5.終了します");
 		selectSrt = scan.next();
 
-<<<<<<< HEAD
-		
-		while(selectSrt.matches("[+-]?\\d*(\\.\\d+)?")==false){
-			System.out.println("業務を1～5までの数字で選んで下さい");
-			selectSrt = scan.next();		
-		}
-		
-		select = Integer.parseInt(selectSrt);
-		return select;
-=======
-		if(!(selectSrt.matches("[+-]?\\d*(\\.\\d+)?"))) {
+		if(!(selectSrt.matches("[+-]?\\d*(\\.\\d+)?"))||Integer.parseInt(selectSrt)>5) {
 			System.out.println("エラーです。正常ではない値が入力されました");
 			return 0;
 		}
 
 		return Integer.parseInt(selectSrt);
->>>>>>> main
 	}
 
 	// 工場の預かり一覧表示画面
@@ -112,55 +103,72 @@ public class FactoryBusiness {
 	// メッセージ入力画面
 	public String[] writeMassage() {
 		System.out.println("メッセージを記入する衣類のお預かり番号とメッセージを入力してください");
-		try (Scanner scan = new Scanner(System.in)) {
-			String scanStr = scan.next();
-			String[]strings=scanStr.split(",");
-			if(strings.length!=2) {
-				return null;
-			}
-
-			System.out.println("1.確定\n2.戻る");
-			String select = scan.next();
-
-			if (select.equals("1")) {
-				System.out.println("メッセージを入力しました");
-			}else if (select.equals("2")) {
-				System.out.println("メッセージを変更せずに戻ります。");
-				return null;
-			}else {
-				System.out.println("エラーです。メニューに戻ります");
-				return null;
-			}
-
-			return strings;
+		Scanner scan = new Scanner(System.in);
+		String scanStr = scan.next();
+		String[]strings=scanStr.split(",");
+		if(strings.length!=2) {
+			return null;
 		}
+		
+		Pattern p = Pattern.compile("^0+([0-9]+.*)");
+		Matcher m = p.matcher(strings[0]);
+		if (m.matches()) {
+			strings[0]=m.group(1);
+		}
+		
+		System.out.println("1.確定\n2.戻る");
+		String select = scan.next();
+
+		if (select.equals("1")) {
+			System.out.println("メッセージを入力しました");
+		}else if (select.equals("2")) {
+			System.out.println("メッセージを変更せずに戻ります。");
+			return null;
+		}else {
+			System.out.println("エラーです。メニューに戻ります");
+			return null;
+		}
+
+		return strings;
 	}
+
 
 	// お渡し予定日の変更画面
 	public String[] cangeHandOverDay() {
 		System.out.println("メッセージを記入する衣類のお預かり番号と変更後の日時を入力してください");
 		System.out.println("例：お預かり番号(四桁),変更後のお渡し日(YYYY-MM-DD)");
-		
+
 		Scanner scan = new Scanner(System.in);
 		String scanStr = scan.next();
 		String[]strings=scanStr.split(",");
+		if(strings.length!=2) {
+			return null;
+		}
+		
+		Pattern p = Pattern.compile("^0+([0-9]+.*)");
+		Matcher m = p.matcher(strings[0]);
+		if (m.matches()) {
+			strings[0]=m.group(1);
+		}
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		sdf.setLenient(false);
 		boolean formatCheck=false;
 
-		while(!formatCheck) {   
-			scanStr = scan.next();
-			strings=scanStr.split(",");
-		
+		while(!formatCheck) {  
 			try{
-				sdf.parse(strings[1]);//正しい日付
+				if(!(strings[1].equals("お渡し可"))) {
+					sdf.parse(strings[1]);//正しい日付
+				}
 				Integer.parseInt(strings[0]);//正しい番号
 				formatCheck=true;
+
 			} catch (ParseException e){
 				System.out.println("正しい値を入力してください");
 				System.out.println("メッセージを記入する衣類のお預かり番号と変更後の日時を入力してください");
 				System.out.println("例：お預かり番号(四桁),変更後のお渡し日(2022-01-01)");
+				scanStr = scan.next();
+				strings=scanStr.split(",");
 			}
 		}
 

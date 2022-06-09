@@ -36,8 +36,12 @@ public class FindService {
 	}
 	
 	//お渡しする（削除する）データ
-	public DepositDataList deliveryDatas(int[] depositNumber) throws SQLException {
-		return this.shopRepository.findDepositDataList(depositNumber);
+	public DepositDataList deliveryDatas(List<Integer>list) throws SQLException {
+		DepositDataList depositDataList=this.shopRepository.findDepositDataList(list);
+		if(list.size()==depositDataList.size()) {
+			return depositDataList;
+		}
+		return null;
 	}
 	
 	public DepositDataList findAllData() {

@@ -57,14 +57,14 @@ public class ShopRepository {
 	}
 
 	private String deleteTime(String str) {
-		if(!str.equals("お渡し可")) {
+		if(!str.equals("お渡し可")&&str.length()>10) {
 			return str.substring(0,str.length()-9);
 		}
 		return str;
 	}
 
 	//会員登録
-	public void witeUserDatas(UserData userData){
+	public void writeUserDatas(UserData userData){
 		
 		Connection con=getConnection();
 		try(PreparedStatement preparableStatement=
@@ -106,7 +106,7 @@ public class ShopRepository {
 			preparableStatement.close();
 			
 			try(PreparedStatement SelectPreparableStatement=
-					con.prepareStatement("select Regist.DepositNumber,Regist.DepositDate from Regist order by Regist.DepositNumber desc limit 1;")){
+					con.prepareStatement("select Regist.DepositNumber,Regist.DepositDate,Regist.TotalAmount from Regist order by Regist.DepositNumber desc limit 1;")){
 
 				try(ResultSet rs =SelectPreparableStatement.executeQuery()){
 					while(rs.next()) {
@@ -127,7 +127,7 @@ public class ShopRepository {
 						formatDate=cdr.getTime();
 						//str変換
 						String string=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(formatDate);
-						registerInfo=new RegisterInfo(string,rs.getInt("DepositNumber"));
+						registerInfo=new RegisterInfo(string,rs.getInt("DepositNumber"),rs.getInt("TotalAmount"));
 					}
 					
 					rs.close();
@@ -156,7 +156,6 @@ public class ShopRepository {
 
 			try(ResultSet rs =SelectPreparableStatement.executeQuery()){
 				while(rs.next()) {
-					RegisterInfo registerInfo=new RegisterInfo(setDate(rs.getString("DepositDate")),rs.getInt("DepositNumber"));
 					DepositData depositData=new DepositData(rs.getInt("DepositNumber"),setDate(rs.getString("DepositDate")), rs.getInt("UserId"),rs.getInt("ClothesId"),rs.getBoolean("WashHurryFinish"),
 							rs.getBoolean("WashDeluxeFinish"),rs.getBoolean("WashStainRemoval"),
 							rs.getInt("TotalAmount"),deleteTime(rs.getString("FinishDate")),rs.getString("FactoryMessage"));
@@ -175,12 +174,12 @@ public class ShopRepository {
 	}
 
 	//データを削除
-	public void DeleteDepositData(int[] depositId) throws SQLException {
+	public void deleteDepositData(List<Integer>list) throws SQLException {
 		Connection con=getConnection();
-		for(int i=0;i<depositId.length;i++) {
+		for(int i=0;i<list.size();i++) {
 			try(PreparedStatement preparableStatement=
 					con.prepareStatement("delete from Regist where DepositNumber=?;")){
-				preparableStatement.setInt(1, depositId[i]);
+				preparableStatement.setInt(1, list.get(i));
 				preparableStatement.executeUpdate();//実行
 				preparableStatement.close();
 				
@@ -192,7 +191,8 @@ public class ShopRepository {
 	}
 
 	//予定日を変更
-	public void UpdateDay(int depositId,String day) {
+	public void updateDay(int depositId,String day) {
+		System.out.println(day); //2022-01-01
 		Connection con=getConnection();
 		try(PreparedStatement preparableStatement=
 				con.prepareStatement("update Regist set FinishDate=? where DepositNumber=?")){
@@ -275,20 +275,21 @@ public class ShopRepository {
 	}
 
 	//預かり一覧（渡すとき）
-	public DepositDataList findDepositDataList(int[] depositNumber) throws SQLException {
+	public DepositDataList findDepositDataList(List<Integer>list) throws SQLException {
 		DepositDataList depositDataList=new DepositDataList();
 		Connection con=getConnection();
-		for(int i=0;i<depositNumber.length;i++) {
+		for(int i=0;i<list.size();i++) {
 			try(PreparedStatement preparableStatement=
 					con.prepareStatement("select * from Regist where DepositNumber = ?;")){
-				preparableStatement.setInt(1,depositNumber[i]);
+				preparableStatement.setInt(1,list.get(i));
 				try(ResultSet rs =preparableStatement.executeQuery()){
 					if(rs.next()) {
-						RegisterInfo registerInfo=new RegisterInfo(setDate(rs.getString("DepositDate")),rs.getInt("DepositNumber"));
+						if(rs.getString("FinishDate").equals("お渡し可")) {
 						DepositData depositData=new DepositData(rs.getInt("DepositNumber"),rs.getString("DepositDate"), rs.getInt("UserId"),rs.getInt("ClothesId"),rs.getBoolean("WashHurryFinish"),
 								rs.getBoolean("WashDeluxeFinish"),rs.getBoolean("WashStainRemoval"),
 								rs.getInt("TotalAmount"),deleteTime(rs.getString("FinishDate")),rs.getString("FactoryMessage"));
-						depositDataList.addData(depositData);
+						depositDataList.addData(depositData);	
+						}
 						rs.close();
 					}
 				}catch (Exception e) {

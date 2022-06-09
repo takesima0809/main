@@ -21,4 +21,8 @@ public class DepositDataList {
 	public DepositData next() {
 		return depositList.get(cursol++);
 	}
+	
+	public int size() {
+		return this.depositList.size();
+	}
 }

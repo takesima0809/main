@@ -8,13 +8,13 @@ public class FactoryController {
 	private final  FactoryBusiness factoryBusiness;
 	private final UpdataService updataService;
 	private final FindService findService;
-	
+
 	public FactoryController() {
 		this.factoryBusiness=new FactoryBusiness();
 		this.updataService=new UpdataService();
 		this.findService=new FindService();
 	}
-	
+
 	public void run() 
 	{
 		int selectBusiness=0;
@@ -31,12 +31,16 @@ public class FactoryController {
 			}
 			case 3: {
 				String[] message= factoryBusiness.cangeHandOverDay();
-				updataService.updataFinishDate(Integer.parseInt(message[0]),message[1]);
+				if(message!=null) {
+					updataService.updataFinishDate(Integer.parseInt(message[0]),message[1]);
+				}
 				break;
 			}
 			case 4: {
 				String[] message= factoryBusiness.writeMassage();
-				updataService.updataMessage(Integer.parseInt(message[0]),message[1]);
+				if(message!=null) {
+					updataService.updataMessage(Integer.parseInt(message[0]),message[1]);
+				}
 				break;
 			}
 			case 5:{
@@ -46,6 +50,6 @@ public class FactoryController {
 				break;
 			}
 		}
-		
+
 	}
 }

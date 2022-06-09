@@ -19,6 +19,13 @@ public class FactoryBusiness {
 		System.out.println("4.メッセージの記入");
 		System.out.println("5.終了します");
 		selectSrt = scan.next();
+
+		
+		while(selectSrt.matches("[+-]?\\d*(\\.\\d+)?")==false){
+			System.out.println("業務を1～5までの数字で選んで下さい");
+			selectSrt = scan.next();		
+		}
+		
 		select = Integer.parseInt(selectSrt);
 		return select;
 	}

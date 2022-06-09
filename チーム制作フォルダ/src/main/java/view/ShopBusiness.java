@@ -29,12 +29,12 @@ public class ShopBusiness {
 		String userDataString = scan.next();
 		String[]userDataArray=userDataString.split(",");
 
-		if(userDataArray[1].matches("[+-]?\\d*(\\.\\d+)?")==false){
-			//電話番号を正しく入力するまで繰り返す
-			while(userDataArray[1].matches("[+-]?\\d*(\\.\\d+)?")==false) {
-				System.out.println("電話番号を正しく入力してください");
-				userDataArray[1]=scan.next();
-			}
+
+		//電話番号を正しく入力するまで繰り返す
+		while(userDataArray.length!=2||userDataArray[1].matches("[+-]?\\d*(\\.\\d+)?")==false||userDataArray[1].length()<10) {
+			System.out.println("お客様情報を正しく入力してください");
+			userDataString = scan.next();
+			userDataArray=userDataString.split(",");
 		}
 
 		UserName userName=new UserName(userDataArray[0]);
@@ -42,9 +42,12 @@ public class ShopBusiness {
 
 		UserData userData=new UserData(phoneNumber, null, userName);
 
+
 		System.out.println("情報入力を完了しました\nメインメニュー画面へ戻ります");
 		return userData;
 	}
+	
+	
 
 	// ２．衣類受付依頼
 	public List<BeforeDeposit> viewReception(List<viewClothesData>list) {
@@ -72,13 +75,14 @@ public class ShopBusiness {
 		List<BeforeDeposit> beforeDepositList=new ArrayList<>();
 
 
-		//ここに値段表をsysoで書く
+		System.out.println("服番号  服の名前          値段     仕上がり日数");
+		
 		for(int i=0;i<list.size();i++) {
 			viewClothesData viewClothesData=list.get(i);
-			System.out.print(viewClothesData.getClothesId());
-			System.out.print(viewClothesData.getClothesName());
-			System.out.print(viewClothesData.getPrice());
-			System.out.print(viewClothesData.getFinishDay());
+			System.out.print(String.format("%-8d",viewClothesData.getClothesId()));
+			System.out.print(format(viewClothesData.getClothesName(),16));
+			System.out.print(String.format("%6d",viewClothesData.getPrice())+"円");
+			System.out.print(String.format("%7d",viewClothesData.getFinishDay())+"日");
 			System.out.println();
 		}
 
@@ -101,7 +105,6 @@ public class ShopBusiness {
 		System.out.println("服は番号で指定してください");
 		System.out.println("オプションに関しては「0」なし「1」あり、として入力してください");
 		System.out.println("染み抜きオプションは染み抜き箇所入力してください");
-		System.out.println("登録回数を入力してください");
 
 
 		//回数分依頼を受け付ける
@@ -135,6 +138,16 @@ public class ShopBusiness {
 					System.out.println("オプション１をつけるか入力してください\n1.はい\n2.いいえ");
 					optionJudgmentStr=scan.next();
 
+					if(optionJudgmentStr.equals("1"))
+					{
+						optionJudgment[0]=true;
+					}
+
+					else if(optionJudgmentStr.equals("2"))
+					{
+						optionJudgment[0]=false;
+					}
+
 					while(!(optionJudgmentStr.equals("1")||optionJudgmentStr.equals("2")))//訂正
 					{
 
@@ -157,12 +170,12 @@ public class ShopBusiness {
 				System.out.println("オプション２をつけるか入力してください\n1.はい\n2.いいえ");
 				optionJudgmentStr=scan.next();
 
-				if(Integer.parseInt(optionJudgmentStr)==1)
+				if(optionJudgmentStr.equals("1"))
 				{
 					optionJudgment[1]=true;
 				}
 
-				else if(Integer.parseInt(optionJudgmentStr)==0)
+				else if(optionJudgmentStr.equals("2"))
 				{
 					optionJudgment[1]=false;
 				}
@@ -195,7 +208,7 @@ public class ShopBusiness {
 				beforeDepositList.add(beforeDeposit);
 				System.out.println((i+1)+"件目をリストに追加しました\n");
 
-				
+
 			}
 			catch(InputMismatchException e)
 			{
@@ -256,7 +269,7 @@ public class ShopBusiness {
 		int[] depositNumbers= {0,0,0,0,0,0,0,0,0,0};
 
 		for (int i = 0; i <handOverCount.length; i++) {
-			
+
 
 			if(handOverCount[i].matches("[+-]?\\d*(\\.\\d+)?")==false&&!(handOverCount[i].length()==4))
 			{
@@ -264,7 +277,7 @@ public class ShopBusiness {
 				return depositNumbers;
 			}
 		}
-		
+
 		for(int i=0;i<handOverCount.length;i++) {
 			String str = handOverCount[i];
 			Pattern p = Pattern.compile("^0+([0-9]+.*)");
@@ -273,11 +286,11 @@ public class ShopBusiness {
 				depositNumbers[i]=Integer.parseInt(m.group(1));
 			}
 		}
-		
+
 		return depositNumbers;
 
 	}
-	
+
 	public boolean viewDepositList(DepositDataList depositDataList) {
 		while(depositDataList.hasNext()) {
 			DepositData depositData=depositDataList.next();
@@ -287,7 +300,7 @@ public class ShopBusiness {
 			System.out.print(depositData.getClothesId());
 			System.out.println();
 		}
-		
+
 		System.out.println("こちらの一覧をお客様にお渡ししますか？");
 		System.out.println("1.確定\n2.取り消し");
 		Scanner scan=new Scanner(System.in);
@@ -312,18 +325,19 @@ public class ShopBusiness {
 		UserId userId=new UserId(scan.nextInt());
 		return userId;
 	}
-	
+
 	public void viewDepositListToUserId(DepositDataList depositDataList) {
+		System.out.println("ユーザID  お預かり日  お預かり時間  オプション1,2,3,の有無  お渡し予定日  工場からのメッセージ");
 		while(depositDataList.hasNext()) {
 			DepositData depositData=depositDataList.next();
-			System.out.print(depositData.getdepositNumber());
-			System.out.print(depositData.getDepositDay());
-			System.out.print(depositData.getUserId());
-			System.out.print(depositData.getClothesId());
-			System.out.print(depositData.getOption1());
-			System.out.print(depositData.getOption2());
-			System.out.print(depositData.getOption3());
-			System.out.print(depositData.getFinishDay());
+			System.out.print(String.format("%2d",depositData.getdepositNumber())+"  ");
+			System.out.print(depositData.getDepositDay()+"  ");
+			System.out.print(depositData.getUserId()+"  ");
+			System.out.print(depositData.getClothesId()+"  ");
+			System.out.print(String.format("%5s",depositData.getOption1())+"  ");
+			System.out.print(String.format("%5s",depositData.getOption2())+"  ");
+			System.out.print(String.format("%5s",depositData.getOption3())+"  ");
+			System.out.print(depositData.getFinishDay()+"  ");
 			System.out.print(depositData.getFactoryMessage());
 			System.out.println();
 		}

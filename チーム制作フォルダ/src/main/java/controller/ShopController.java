@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
 
+import entities.BeforeDeposit;
 import entities.UserData;
 import service.AddService;
 import service.DeleteService;
@@ -41,7 +42,10 @@ public class ShopController {
 				addService.UserSignUp(userData.getUserName().toStr(), userData.getPhoneNumber().toStr());
 				break;
 			case 2:
-				this.shopBusiness.showDepositInfo(this.addService.ClothesReception(this.shopBusiness.viewReception(findService.findClothesDatas())));
+				List<BeforeDeposit> list=this.shopBusiness.viewReception(findService.findClothesDatas());
+				if(list!=null) {
+				this.shopBusiness.showDepositInfo(this.addService.ClothesReception(list));
+				}
 				break;
 			case 3:
 				List<Integer> deleteNumber=shopBusiness.viewHandOver();

@@ -53,48 +53,43 @@ public class ShopBusiness {
 	// ２．衣類受付依頼
 	public List<BeforeDeposit> viewReception(List<viewClothesData>list) {
 		Scanner scan = new Scanner(System.in);
-
+		String  scanS =null;
 
 		//ユーザデータ
 		UserData userData = null;
 		//服のID
-		String clothesId=null;
 		int clothesIdInt;
 		//オプション1,2の有無を表すboolean配列
 		boolean[] optionJudgment = {false,false};
-		String optionJudgmentStr = "0";
 		//オプション3の個所数を表す
-		String stainNumStr = null;
 		int stainNum;
 		//合計金額
-		int totalPrice=1000;
+		int totalPrice=0;
 		//工場メッセージを表す
-		String factoryMessage="aaaa";
+		String factoryMessage=null;
 
 		BeforeDeposit beforeDeposit=null;
 		int price=0;
 		List<BeforeDeposit> beforeDepositList=new ArrayList<>();
 
 
-		System.out.println("服番号  服の名前          値段     仕上がり日数");
+
+
+		System.out.println("服番号  服の名前                  値段      仕上がり日数");
 
 		for(int i=0;i<list.size();i++) {
 			viewClothesData viewClothesData=list.get(i);
 			System.out.print(String.format("%-8d",viewClothesData.getClothesId()));
-			System.out.print(format(viewClothesData.getClothesName(),16));
+			System.out.print(format(viewClothesData.getClothesName(),24));
 			System.out.print(String.format("%6d",viewClothesData.getPrice())+"円");
-			System.out.print(String.format("%7d",viewClothesData.getFinishDay())+"日");
+			System.out.print(String.format("%6d",viewClothesData.getFinishDay())+"日");
 			System.out.println();
 		}
-
-		System.out.println(format("オプション１：",25)+format("特急仕上げ：",15)+"スーツ、ワイシャツのみに対応。翌日の仕上がりになります。追加料金は発生しません。");
-		System.out.println(format("オプション２：",25)+format("豪華仕上げ：",15)+"高級仕上げ、金額は通常料金の1.5倍になります。");
-		System.out.println(format("オプション３：",25)+format("染み抜き：",15)+"衣類に関係なく、一か所につき200円かかります。複数個数の時はその数だけ加算します。\n\n");
-
-		System.out.println("例に従って衣類の登録最大十件行ってください");
-		System.out.println("服は番号で指定してください");
-		System.out.println("オプションに関しては「0」なし「1」あり、として入力してください");
-		System.out.println("染み抜きオプションは染み抜き箇所入力してください");
+		System.out.println();
+		System.out.println(format("特急仕上げ：",15)+"スーツ、ワイシャツのみに対応。翌日の仕上がりになります。追加料金は発生しません。");
+		System.out.println(format("豪華仕上げ：",15)+"高級仕上げ、金額は通常料金の1.5倍になります。");
+		System.out.println(format("染み抜き：",15)+"衣類に関係なく、一か所につき200円かかります。複数個数の時はその数だけ加算します。\n\n");
+		System.out.println("戻る場合はEXITと入力してください");
 
 
 		//回数分依頼を受け付ける
@@ -102,103 +97,93 @@ public class ShopBusiness {
 		{
 			try
 			{
-				//useridの番号を入力
-				System.out.println("ユーザIDを入力してください");
-				String id=scan.next();
-				CleanOption cleanOption=new CleanOption();
 
-				while(id.matches("[+-]?\\d*(\\.\\d+)?")==false) {
-					System.out.println("ユーザIDを入力してください");
-					id=scan.next();
+				System.out.println("追加の受け付けをしますか？\n1.はい\n2.いいえ\n戻る場合はEXITと入力してください");
+				scanS=scan.next();
+				if(scanS.equals("2"))
+				{
+					break;
+				}
+				else if(scanS.equals("EXIT")) {
+					return null;
 				}
 
-				UserId userId=new UserId(Integer.parseInt(id));
+				//useridの番号を入力
+				System.out.println("ユーザIDを入力してください");
+				scanS=scan.next();
+				CleanOption cleanOption=new CleanOption();
+
+				while(scanS.matches("[+-]?\\d*(\\.\\d+)?")==false) {
+					System.out.println("ユーザIDを入力してください");
+					scanS=scan.next();
+				}
+
+				UserId userId=new UserId(Integer.parseInt(scanS));
 				userData=new UserData(null, userId, null);
 
 				//服の番号を入力
-				System.out.println("服の番号を１～８までで入力してください");
-				clothesId=scan.next();
+				System.out.println("服の番号を1～8までで入力してください");
+				scanS=scan.next();
 
 
-				while(Integer.parseInt(clothesId)<=0||9<=Integer.parseInt(clothesId)||clothesId.matches("[+-]?\\d*(\\.\\d+)?")==false)
+				while(Integer.parseInt(scanS)<=0||9<=Integer.parseInt(scanS)||scanS.matches("[+-]?\\d*(\\.\\d+)?")==false)
 				{
-					System.out.println("服の番号を１～８の番号を入力してください");
-					clothesId=scan.next();
+					System.out.println("服の番号を1～8の番号を入力してください");
+					scanS=scan.next();
 				}
 
-				clothesIdInt=Integer.parseInt(clothesId);
-				price+=list.get(Integer.parseInt(clothesId)).getPrice();
-				
-				if(clothesId.equals("1")||clothesId.equals("2"))
+				clothesIdInt=Integer.parseInt(scanS);
+				price+=list.get(Integer.parseInt(scanS)-1).getPrice();
+
+				if(scanS.equals("1")||scanS.equals("2"))
 				{
-
 					//オプション１の有り無しを判断
-					System.out.println("オプション１をつけるか入力してください\n1.はい\n2.いいえ");
-					optionJudgmentStr=scan.next();
+					System.out.println("特急仕上げにするか入力してください\n1.はい\n2.いいえ");
+					scanS=scan.next();
 
-					if(optionJudgmentStr.equals("1"))
+					while(!(scanS.equals("1")||scanS.equals("2"))||!(scanS.matches("[+-]?\\d*(\\.\\d+)?")))//訂正
+					{
+						System.out.println("正しい値を入力してください\n1.はい\n2.いいえ");
+						scanS=scan.next();
+					}
+
+
+
+					if(scanS.equals("1"))
 					{
 						optionJudgment[0]=true;
 					}
 
-					else if(optionJudgmentStr.equals("2"))
+					else if(scanS.equals("2"))
 					{
 						optionJudgment[0]=false;
 					}
-
-					while(!(optionJudgmentStr.equals("1")||optionJudgmentStr.equals("2"))||!(optionJudgmentStr.matches("[+-]?\\d*(\\.\\d+)?")))//訂正
-					{
-
-						System.out.println("正しい値を入力してください\n1.はい\n2.いいえ");
-						optionJudgmentStr=scan.next();
-
-						if(optionJudgmentStr.equals("1"))
-						{
-							optionJudgment[0]=true;
-						}
-
-						else if(optionJudgmentStr.equals("2"))
-						{
-							optionJudgment[0]=false;
-						}
-					}
 				}
+
 				//オプション２の有り無しを判断
+				System.out.println("豪華仕上げにするか入力してください\n1.はい\n2.いいえ");
+				scanS=scan.next();
 
-				System.out.println("オプション２をつけるか入力してください\n1.はい\n2.いいえ");
-				optionJudgmentStr=scan.next();
+				while(!(scanS.equals("1")||scanS.equals("2"))||!(scanS.matches("[+-]?\\d*(\\.\\d+)?")))//訂正
+				{
+					System.out.println("正しい値を入力してください\n1.はい\n2.いいえ");
+					scanS=scan.next();
+				}
 
-				if(optionJudgmentStr.equals("1"))
+				if(scanS.equals("1"))
 				{
 					optionJudgment[1]=true;
 					price=cleanOption.washDeluxeFinish(price);
 				}
 
-				else if(optionJudgmentStr.equals("2"))
+				else if(scanS.equals("2"))
 				{
 					optionJudgment[1]=false;
 				}
 
-				while(!(optionJudgmentStr.equals("1")||optionJudgmentStr.equals("2"))||!(optionJudgmentStr.matches("[+-]?\\d*(\\.\\d+)?")))//訂正
-				{
 
-					System.out.println("正しい値を入力してください\n1.はい\n2.いいえ");
-					optionJudgmentStr=scan.next();
-
-					if(optionJudgmentStr.equals("1"))
-					{
-						optionJudgment[1]=true;
-					}
-
-					else if(optionJudgmentStr.equals("2"))
-					{
-						optionJudgment[1]=false;
-					}
-				}
-
-				
 				//オプション３の数をシミの数を入力する
-				System.out.println("オプション３によるシミの数を入力してください。\nない場合は0と入力してください");
+				System.out.println("染み抜きをする個所数を入力してください。\nない場合は0と入力してください");
 				stainNum=Integer.parseInt(scan.next());
 				price=cleanOption.washStainRemoval(price,stainNum);
 
@@ -206,6 +191,9 @@ public class ShopBusiness {
 				beforeDeposit = new BeforeDeposit(userData,clothesIdInt,optionJudgment[0],optionJudgment[1],stainNum,totalPrice,factoryMessage);
 				beforeDepositList.add(beforeDeposit);
 				System.out.println((i+1)+"件目をリストに追加しました\n");
+
+
+
 
 
 			}
@@ -219,28 +207,20 @@ public class ShopBusiness {
 				System.out.println("エラーが発生したのでもう一度入力してください");
 				i--;
 			}
-			System.out.println("追加の受け付けをしますか？\n1.はい\nいいえの場合はそれ以外の値を入力してください");
-
-
-			if(!(scan.next().equals("1")))
-			{
-				break;
-			}
 		}
 		//登録した衣類リストを確認用に表示
 		//ヘッダーを記入する
-		System.out.println("衣類番号  オプション１  オプション２  オプション３");
+		System.out.println("衣類番号  特急仕上げ  豪華仕上げ  染み抜き数");
 		for(int i=0;i<beforeDepositList.size();i++) 
 		{
 			beforeDeposit=beforeDepositList.get(i);
 			System.out.print(beforeDeposit.getClothesData());
 			System.out.print(String.format("%13b",beforeDeposit.getCleanOption1()));
-			System.out.print(String.format("%14b",beforeDeposit.getCleanOption2()));
-			System.out.println(String.format("%14b",beforeDeposit.getCleanOption3()));		
+			System.out.print(String.format("%12b",beforeDeposit.getCleanOption2()));
+			System.out.println(String.format("%12b",beforeDeposit.getCleanOption3()));		
 		}
-		System.out.println("合計金額"+price);
-		
-		System.out.println("上記を登録しました");
+
+		System.out.println("上記を登録しました\n");
 
 		return beforeDepositList;
 	}
@@ -251,9 +231,9 @@ public class ShopBusiness {
 		while(registerList.hasNext()) {
 			RegisterInfo registerInfo=registerList.next();
 			price+=registerInfo.getTotalPrice();
-			System.out.println(String.format("%04d",registerInfo.getdepositNumber())+"          "+registerInfo.getregistrationDate());//0埋めする
+			System.out.println(String.format("%04d",registerInfo.getdepositNumber())+"        "+registerInfo.getregistrationDate());//0埋めする
 		}
-		System.out.println("合計金額"+price);
+		System.out.println("合計金額"+price+"円");
 		System.out.println("戻る場合はキーを入力してください");
 		Scanner scanner =new Scanner(System.in);
 		scanner.next();
@@ -265,17 +245,17 @@ public class ShopBusiness {
 		String[] handOverCount;
 		List<Integer>list=new ArrayList<>();
 		System.out.println("仕上がり済みの4桁のお預かり番号をカンマ区切りで最大十件入力してください");
-		System.out.println("例・・・");
+		System.out.println("例：0001,0002,0003");
 		System.out.println("仕上がり済みのお預かり番号が見つからない場合エラーとなります");
 
+
+
 		handOverCount=scan.next().split(",");
-		int[] depositNumbers= {0,0,0,0,0,0,0,0,0,0};
 
 		for (int i = 0; i <handOverCount.length; i++) {
 			if(handOverCount[i].matches("[+-]?\\d*(\\.\\d+)?")==false||!(handOverCount[i].length()==4))
 			{
 				System.out.println("エラー：見つかりませんでした");
-				return null;
 			}
 		}
 
@@ -293,13 +273,14 @@ public class ShopBusiness {
 
 	public boolean viewDepositList(DepositDataList depositDataList) {
 		if(depositDataList!=null) {
+			System.out.println("データの数は"+depositDataList.size()+"です");
+			System.out.println("お預かり番号  預かり日時          お客様ID  服番号");
 			while(depositDataList.hasNext()) {
-				System.out.println("データの数は"+depositDataList.size());
 				DepositData depositData=depositDataList.next();
-				System.out.print(depositData.getdepositNumber());
-				System.out.print(depositData.getDepositDay());
-				System.out.print(depositData.getUserId());
-				System.out.print(depositData.getClothesId());
+				System.out.print(String.format("%04d",depositData.getdepositNumber()));
+				System.out.print(String.format("%29s",depositData.getDepositDay()));
+				System.out.print(String.format("%2d",depositData.getUserId()));
+				System.out.print(String.format("%10d",depositData.getClothesId()));
 				System.out.println();
 
 				System.out.println("こちらの一覧をお客様にお渡ししますか？");
@@ -331,28 +312,36 @@ public class ShopBusiness {
 		UserId userId=null;
 		try {
 			userId=new UserId(scan.nextInt());
+
 		}
-		catch(Exception e) {
+		catch(NullPointerException e) {
 			System.out.println("値が不正です");
 		}
-
 		return userId;
+
 	}
 
 	public void viewDepositListToUserId(DepositDataList depositDataList) {
-		System.out.println("ユーザID  お預かり日  お預かり時間  オプション1,2,3の有無  お渡し予定日  工場からのメッセージ");
+		System.out.println("お預かり番号  お預かり日時         ユーザID  洋服番号 オプション1,2,3の有無  お渡し予定日      工場からのメッセージ");
 		if(depositDataList.size()!=0) {
 			while(depositDataList.hasNext()) {
 				DepositData depositData=depositDataList.next();
-				System.out.print(String.format("%2d",depositData.getdepositNumber())+"  ");
-				System.out.print(depositData.getDepositDay()+"  ");
-				System.out.print(depositData.getUserId()+"  ");
-				System.out.print(depositData.getClothesId()+"  ");
-				System.out.print(String.format("%5s",depositData.getOption1())+"  ");
-				System.out.print(String.format("%5s",depositData.getOption2())+"  ");
-				System.out.print(String.format("%5s",depositData.getOption3())+"  ");
-				System.out.print(depositData.getFinishDay()+"  ");
-				System.out.print(depositData.getFactoryMessage());
+				System.out.print(String.format("%2d",depositData.getdepositNumber()));
+				System.out.print(String.format("%31s",depositData.getDepositDay()));
+				System.out.print(String.format("%3d",depositData.getUserId()));
+				System.out.print(String.format("%10d",depositData.getClothesId()));
+				System.out.print(String.format("%13s",depositData.getOption1()));
+				System.out.print(String.format("%6s",depositData.getOption2()));
+				System.out.print(String.format("%6s",depositData.getOption3())+"      ");
+				System.out.print(format(depositData.getFinishDay(),16));
+
+				if(depositData.getFactoryMessage()==null) {
+					System.out.print(String.format("%6s",depositData.getFactoryMessage()));
+				}else {
+					System.out.print("　"+depositData.getFactoryMessage());
+				}
+
+
 				System.out.println();
 			}
 		}else {

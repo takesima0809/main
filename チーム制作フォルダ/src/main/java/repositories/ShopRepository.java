@@ -355,5 +355,29 @@ public class ShopRepository {
 		
 		return list;
 	}
+	
+	public DepositDataList messageDatas() {
+		DepositDataList depositDataList=new DepositDataList();
+		Connection con=getConnection();
+		try(PreparedStatement preparableStatement=
+				con.prepareStatement("select * from Regist where FactoryMessage is not NULL;")){
+			try(ResultSet rs =preparableStatement.executeQuery()){
+				while(rs.next()) {
+					DepositData depositData=new DepositData(rs.getInt("DepositNumber"),setDate(rs.getString("DepositDate")), rs.getInt("UserId"),rs.getInt("ClothesId"),rs.getBoolean("WashHurryFinish"),
+							rs.getBoolean("WashDeluxeFinish"),rs.getBoolean("WashStainRemoval"),
+							rs.getInt("TotalAmount"),deleteTime(rs.getString("FinishDate")),rs.getString("FactoryMessage"));
+					depositDataList.addData(depositData);
+				}
+				rs.close();
+			}catch (Exception e) {
+				System.out.println(e);
+			}
+			con.close();
+			preparableStatement.close();
+		}catch (Exception e) {
+			System.out.println(e);
+		}
 
+		return depositDataList;
+	}
 }

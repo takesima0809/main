@@ -193,11 +193,11 @@ public class ShopRepository {
 	//予定日を変更
 	public boolean updateDay(int depositId,String day){
 		Connection con=getConnection();
-		
 		try(PreparedStatement preparableStatement=
 				con.prepareStatement("update Regist set FinishDate=? where DepositNumber=?")){
 			preparableStatement.setString(1, day);
 			preparableStatement.setInt(2, depositId);
+			preparableStatement.executeUpdate();//実行
 		}catch (Exception e) {
 			System.out.println(e);
 		}

@@ -34,16 +34,16 @@ public class FactoryBusiness {
 
 	// 工場の預かり一覧表示画面
 	public void viewClothesList(DepositDataList depositDataList) {
-		System.out.println("お預かり番号　預かり日　ユーザID　衣服ID　特急仕上げ　デラックス仕上げ　染み抜き個数　仕上がり予定日　工場からのメッセージ");
+		System.out.println("お預かり番号　預かり日　　　　　　　　ユーザID　衣服ID　特急仕上げ　デラックス仕上げ　染み抜き個数　仕上がり予定日　 工場からのメッセージ");
 		while(depositDataList.hasNext()) {
 			DepositData depositData=depositDataList.next();
-			System.out.print(String.format("%-3d",depositData.getdepositNumber()));
-			System.out.print(String.format("%-22s",depositData.getDepositDay()));
-			System.out.print(String.format("%-4d",depositData.getUserId()));
-			System.out.print(String.format("%-4d",depositData.getClothesId()));
-			System.out.print(String.format("%-9s",depositData.getOption1()));
-			System.out.print(String.format("%-9s",depositData.getOption2()));
-			System.out.print(String.format("%-9s",depositData.getOption3()));
+			System.out.print(String.format("%-14d",depositData.getdepositNumber()));
+			System.out.print(String.format("%-24s",depositData.getDepositDay()));
+			System.out.print(String.format("%-10d",depositData.getUserId()));
+			System.out.print(String.format("%-8d",depositData.getClothesId()));
+			System.out.print(String.format("%-12s",depositData.getOption1()));
+			System.out.print(String.format("%-18s",depositData.getOption2()));
+			System.out.print(String.format("%-13s",depositData.getOption3()+"個"));
 			System.out.print(format(depositData.getFinishDay(),15));
 			if(depositData.getFactoryMessage()==null) {
 				System.out.print(String.format("%6s",depositData.getFactoryMessage()));
@@ -85,16 +85,16 @@ public class FactoryBusiness {
 	// 絞り込み預かり一覧の表示画面
 	public void viewSelectClothesList(DepositDataList depositDataList) {
 		if(depositDataList.size()!=0) {
-			System.out.println("お預かり番号　預かり日　ユーザID　衣服ID　特急仕上げ　デラックス仕上げ　染み抜き個数　仕上がり予定日　工場からのメッセージ");
+			System.out.println("お預かり番号　預かり日　　　　　　　　ユーザID　衣服ID　特急仕上げ　デラックス仕上げ　染み抜き個数　仕上がり予定日　 工場からのメッセージ");
 			while(depositDataList.hasNext()) {
 				DepositData depositData=depositDataList.next();
-				System.out.print(String.format("%-3d",depositData.getdepositNumber()));
-				System.out.print(String.format("%-22s",depositData.getDepositDay()));
-				System.out.print(String.format("%-4d",depositData.getUserId()));
-				System.out.print(String.format("%-4d",depositData.getClothesId()));
-				System.out.print(String.format("%-9s",depositData.getOption1()));
-				System.out.print(String.format("%-9s",depositData.getOption2()));
-				System.out.print(String.format("%-9s",depositData.getOption3()));
+				System.out.print(String.format("%-14d",depositData.getdepositNumber()));
+				System.out.print(String.format("%-24s",depositData.getDepositDay()));
+				System.out.print(String.format("%-10d",depositData.getUserId()));
+				System.out.print(String.format("%-8d",depositData.getClothesId()));
+				System.out.print(String.format("%-12s",depositData.getOption1()));
+				System.out.print(String.format("%-18s",depositData.getOption2()));
+				System.out.print(String.format("%-13s",depositData.getOption3()+"個"));
 				System.out.print(format(depositData.getFinishDay(),15));
 				if(depositData.getFactoryMessage()==null) {
 					System.out.print(String.format("%6s",depositData.getFactoryMessage()));

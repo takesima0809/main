@@ -10,6 +10,7 @@ public class MainTest2 {
 		final FactoryController factoryController = new FactoryController();
 		final ShopController shopController = new ShopController();
 		factoryController.run();
+		//shopController.run();
 	}
 
 }

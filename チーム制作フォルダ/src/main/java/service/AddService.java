@@ -77,7 +77,12 @@ public class AddService {
 			beforeDeposit.setFinishDay(String.valueOf(string));
 			beforeDeposit.setTotalPrice(totalPrice.toInt());
 			
-			registerList.add(this.shopRepository.showAddDatas(beforeDeposit));
+			if(	this.shopRepository.userIdCheck(beforeDeposit.getUserData().getUserId().toInt())) {
+				registerList.add(this.shopRepository.showAddDatas(beforeDeposit));
+			}else {
+				return null;
+			}
+			
 		}
 		return registerList;
 	}

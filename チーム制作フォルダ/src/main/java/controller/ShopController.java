@@ -33,7 +33,7 @@ public class ShopController {
 		while(true) {
 			this.menuView.viewMessage();
 
-			int selectBusiness=this.menuView.selectShopBusiness();
+			int selectBusiness=this.menuView.selectShopBusiness(this.findService.getFactoryMes());
 
 			switch(selectBusiness)
 			{
@@ -49,6 +49,9 @@ public class ShopController {
 				break;
 			case 3:
 				List<Integer> deleteNumber=shopBusiness.viewHandOver();
+				if(deleteNumber==null) {
+					break;
+				}
 				if(this.shopBusiness.viewDepositList(findService.deliveryDatas(deleteNumber))) {
 					deleteService.deleteData(deleteNumber);
 				}
@@ -57,7 +60,7 @@ public class ShopController {
 				this.shopBusiness.viewDepositListToUserId(this.findService.findDepositDatas(this.shopBusiness.inputUserId()));
 				break;
 			case 5:
-				this.menuView.finishCode();
+				System.exit(0);
 				break;
 			}
 		}

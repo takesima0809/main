@@ -157,7 +157,7 @@ public class ShopRepository {
 			try(ResultSet rs =SelectPreparableStatement.executeQuery()){
 				while(rs.next()) {
 					DepositData depositData=new DepositData(rs.getInt("DepositNumber"),setDate(rs.getString("DepositDate")), rs.getInt("UserId"),rs.getInt("ClothesId"),rs.getBoolean("WashHurryFinish"),
-							rs.getBoolean("WashDeluxeFinish"),rs.getBoolean("WashStainRemoval"),
+							rs.getBoolean("WashDeluxeFinish"),rs.getInt("WashStainRemoval"),
 							rs.getInt("TotalAmount"),deleteTime(rs.getString("FinishDate")),rs.getString("FactoryMessage"));
 					depositDataList.addData(depositData);
 				}
@@ -191,33 +191,78 @@ public class ShopRepository {
 	}
 
 	//予定日を変更
-	public void updateDay(int depositId,String day) {
-		System.out.println(day); //2022-01-01
+	public boolean updateDay(int depositId,String day){
 		Connection con=getConnection();
+		
 		try(PreparedStatement preparableStatement=
 				con.prepareStatement("update Regist set FinishDate=? where DepositNumber=?")){
 			preparableStatement.setString(1, day);
 			preparableStatement.setInt(2, depositId);
-			preparableStatement.executeUpdate();//実行
-			preparableStatement.close();
-			con.close();
 		}catch (Exception e) {
 			System.out.println(e);
 		}
+		
+		try(PreparedStatement preparableStatement=
+				con.prepareStatement("select DepositNumber from Regist where DepositNumber=?;")){
+			preparableStatement.setInt(1, depositId);
+		
+			
+			try(ResultSet rs =preparableStatement.executeQuery()){
+				if(rs.next()) {
+					con.close();
+					preparableStatement.close();
+					rs.close();
+					return true;
+				}
+				rs.close();
+			}catch (Exception e) {
+				System.out.println(e);
+			}
+			con.close();
+			preparableStatement.close();
+		}catch (Exception e) {
+			System.out.println(e);
+		}
+		
+		return false;
 	}
 	//メッセージを追加
-	public void addMessage(int depositId,String message) {
+	public boolean addMessage(int depositId,String message){
 		Connection con=getConnection();
 		try(PreparedStatement preparableStatement=
 				con.prepareStatement("update Regist set FactoryMessage=? where DepositNumber=?")){
 			preparableStatement.setString(1, message);
 			preparableStatement.setInt(2, depositId);
 			preparableStatement.executeUpdate();//実行
+			//preparableStatement.close();
+			preparableStatement.close();
+			
+		}catch (Exception e) {
+			System.out.println(e);
+		}
+		
+		try(PreparedStatement preparableStatement=
+				con.prepareStatement("select DepositNumber from Regist where DepositNumber=?;")){
+			preparableStatement.setInt(1, depositId);
+			//preparableStatement.execute();//実行
+			
+			try(ResultSet rs =preparableStatement.executeQuery()){
+				if(rs.next()) {
+					rs.close();
+					preparableStatement.close();
+					con.close();
+					return true;
+				}
+				rs.close();
+			}catch (Exception e) {
+				System.out.println(e);
+			}
 			preparableStatement.close();
 			con.close();
 		}catch (Exception e) {
 			System.out.println(e);
 		}
+		return false;
 	}
 
 	//衣服データ取得
@@ -257,7 +302,7 @@ public class ShopRepository {
 			try(ResultSet rs =preparableStatement.executeQuery()){
 				while(rs.next()) {
 					DepositData depositData=new DepositData(rs.getInt("DepositNumber"),setDate(rs.getString("DepositDate")), rs.getInt("UserId"),rs.getInt("ClothesId"),rs.getBoolean("WashHurryFinish"),
-							rs.getBoolean("WashDeluxeFinish"),rs.getBoolean("WashStainRemoval"),
+							rs.getBoolean("WashDeluxeFinish"),rs.getInt("WashStainRemoval"),
 							rs.getInt("TotalAmount"),deleteTime(rs.getString("FinishDate")),rs.getString("FactoryMessage"));
 					depositDataList.addData(depositData);
 				}
@@ -286,7 +331,7 @@ public class ShopRepository {
 					if(rs.next()) {
 						if(rs.getString("FinishDate").equals("お渡し可")) {
 						DepositData depositData=new DepositData(rs.getInt("DepositNumber"),rs.getString("DepositDate"), rs.getInt("UserId"),rs.getInt("ClothesId"),rs.getBoolean("WashHurryFinish"),
-								rs.getBoolean("WashDeluxeFinish"),rs.getBoolean("WashStainRemoval"),
+								rs.getBoolean("WashDeluxeFinish"),rs.getInt("WashStainRemoval"),
 								rs.getInt("TotalAmount"),deleteTime(rs.getString("FinishDate")),rs.getString("FactoryMessage"));
 						depositDataList.addData(depositData);	
 						}
@@ -315,7 +360,7 @@ public class ShopRepository {
 			try(ResultSet rs =preparableStatement.executeQuery()){
 				while(rs.next()) {
 					DepositData depositData=new DepositData(rs.getInt("DepositNumber"),setDate(rs.getString("DepositDate")), rs.getInt("UserId"),rs.getInt("ClothesId"),rs.getBoolean("WashHurryFinish"),
-							rs.getBoolean("WashDeluxeFinish"),rs.getBoolean("WashStainRemoval"),
+							rs.getBoolean("WashDeluxeFinish"),rs.getInt("WashStainRemoval"),
 							rs.getInt("TotalAmount"),deleteTime(rs.getString("FinishDate")),rs.getString("FactoryMessage"));
 					depositDataList.addData(depositData);
 				}
@@ -364,7 +409,7 @@ public class ShopRepository {
 			try(ResultSet rs =preparableStatement.executeQuery()){
 				while(rs.next()) {
 					DepositData depositData=new DepositData(rs.getInt("DepositNumber"),setDate(rs.getString("DepositDate")), rs.getInt("UserId"),rs.getInt("ClothesId"),rs.getBoolean("WashHurryFinish"),
-							rs.getBoolean("WashDeluxeFinish"),rs.getBoolean("WashStainRemoval"),
+							rs.getBoolean("WashDeluxeFinish"),rs.getInt("WashStainRemoval"),
 							rs.getInt("TotalAmount"),deleteTime(rs.getString("FinishDate")),rs.getString("FactoryMessage"));
 					depositDataList.addData(depositData);
 				}
@@ -379,5 +424,28 @@ public class ShopRepository {
 		}
 
 		return depositDataList;
+	}
+	
+	public boolean userIdCheck(int id) {
+		Connection con=getConnection();
+		try(PreparedStatement preparableStatement=
+				con.prepareStatement("select UserId from User where UserId=?;")){
+			preparableStatement.setInt(1, id);
+			//preparableStatement.executeUpdate();//実行
+			
+			try(ResultSet rs =preparableStatement.executeQuery()){
+				if(rs.next()) {
+					return true;
+				}
+				rs.close();
+			}catch (Exception e) {
+				System.out.println(e);
+			}
+			preparableStatement.close();
+			con.close();
+		}catch (Exception e) {
+			System.out.println(e);
+		}
+		return false;
 	}
 }

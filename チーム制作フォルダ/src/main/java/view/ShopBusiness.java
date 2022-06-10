@@ -62,7 +62,7 @@ public class ShopBusiness {
 		//オプション1,2の有無を表すboolean配列
 		boolean[] optionJudgment = {false,false};
 		//オプション3の個所数を表す
-		int stainNum;
+		int stainNum=0;
 		//合計金額
 		int totalPrice=0;
 		//工場メッセージを表す
@@ -104,7 +104,8 @@ public class ShopBusiness {
 				{
 					break;
 				}
-				else if(scanS.equals("EXIT")) {
+				if(scanS.equals("EXIT")||Integer.parseInt(scanS)>2) {
+					System.out.println("メニューに戻ります");
 					return null;
 				}
 
@@ -193,9 +194,6 @@ public class ShopBusiness {
 				System.out.println((i+1)+"件目をリストに追加しました\n");
 
 
-
-
-
 			}
 			catch(InputMismatchException e)
 			{
@@ -217,15 +215,19 @@ public class ShopBusiness {
 			System.out.print(beforeDeposit.getClothesData());
 			System.out.print(String.format("%13b",beforeDeposit.getCleanOption1()));
 			System.out.print(String.format("%12b",beforeDeposit.getCleanOption2()));
-			System.out.println(String.format("%12b",beforeDeposit.getCleanOption3()));		
+			System.out.println(String.format("%12d",stainNum)+"個");		
 		}
 
-		System.out.println("上記を登録しました\n");
+		System.out.println("上記を登録中\n");
 
 		return beforeDepositList;
 	}
 
 	public void showDepositInfo(RegisterList registerList) {
+		if(registerList==null) {
+			System.out.println("ユーザIDが存在しません");
+		}else {
+		System.out.println("登録完了");
 		System.out.println("預かり番号  預かり日時");
 		int price=0;
 		while(registerList.hasNext()) {
@@ -237,6 +239,7 @@ public class ShopBusiness {
 		System.out.println("戻る場合はキーを入力してください");
 		Scanner scanner =new Scanner(System.in);
 		scanner.next();
+		}
 	}
 
 	// ３．お渡し入力
@@ -266,6 +269,11 @@ public class ShopBusiness {
 			if (m.matches()) {
 				list.add(Integer.parseInt(m.group(1)));
 			}
+		}
+		
+		if(list.size()>10) {
+			System.out.println("一度に入力できる件数は10件までです");
+			return null;
 		}
 
 		return list;
@@ -322,7 +330,7 @@ public class ShopBusiness {
 	}
 
 	public void viewDepositListToUserId(DepositDataList depositDataList) {
-		System.out.println("お預かり番号  お預かり日時         ユーザID  洋服番号 オプション1,2,3の有無  お渡し予定日      工場からのメッセージ");
+		System.out.println("お預かり番号  お預かり日時         ユーザID  洋服番号 特急仕上げ　デラックス仕上げ　染抜き個数 お渡し予定日      工場からのメッセージ");
 		if(depositDataList.size()!=0) {
 			while(depositDataList.hasNext()) {
 				DepositData depositData=depositDataList.next();

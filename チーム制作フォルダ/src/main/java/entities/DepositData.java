@@ -7,13 +7,13 @@ public class DepositData {
 	private final int clothesId;
 	private final boolean option1;
 	private final boolean option2;
-	private final boolean option3;
+	private final int option3;
 	private final int totalPrice;
 	private final String finishDay;
 	private final String factoryMessage;
 	
 	public DepositData(int depositNumber,String depositDay,int userId,int clothesId,
-			boolean option1,boolean option2,boolean option3,int totalPrice,String finishDay,String factoryMessage){
+			boolean option1,boolean option2,int option3,int totalPrice,String finishDay,String factoryMessage){
 		
 		this.depositNumber=depositNumber;
 		this.depositDay=depositDay;
@@ -51,7 +51,7 @@ public class DepositData {
 		return this.option2;
 	}
 	
-	public boolean getOption3() {
+	public int getOption3() {
 		return this.option3;
 	}
 	

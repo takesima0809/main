@@ -1,5 +1,6 @@
 package sample;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 
 import controller.FactoryController;
@@ -16,7 +17,7 @@ import userValues.UserName;
 
 public class repositoryTest {
 
-	public static void main(String[] args) throws ParseException{
+	public static void main(String[] args) throws ParseException, NumberFormatException, SQLException{
 		// TODO 自動生成されたメソッド・スタブ
 		UserName userName=new UserName("賀川　勇太");
 		PhoneNumber phoneNumber=new PhoneNumber("09078345232");

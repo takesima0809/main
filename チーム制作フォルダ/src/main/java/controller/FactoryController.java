@@ -15,7 +15,7 @@ public class FactoryController {
 		this.findService=new FindService();
 	}
 
-	public void run() 
+	public void run() throws NumberFormatException
 	{
 		int selectBusiness=0;
 		while(selectBusiness!=5) {
@@ -34,15 +34,15 @@ public class FactoryController {
 			}
 			case 3: {
 				String[] message= factoryBusiness.cangeHandOverDay();
-				if(message!=null) {
-					updataService.updataFinishDate(Integer.parseInt(message[0]),message[1]);
+				if(message!=null) {			
+					this.factoryBusiness.messageInputFlag(updataService.updataFinishDate(Integer.parseInt(message[0]),message[1]));
 				}
 				break;
 			}
 			case 4: {
 				String[] message= factoryBusiness.writeMassage();
 				if(message!=null) {
-					updataService.updataMessage(Integer.parseInt(message[0]),message[1]);
+					this.factoryBusiness.dateInputFlag(updataService.updataMessage(Integer.parseInt(message[0]),message[1]));
 				}
 				break;
 			}

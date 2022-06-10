@@ -47,4 +47,8 @@ public class FindService {
 	public DepositDataList findAllData() {
 		return this.shopRepository.findAll();
 	}
+	
+	public DepositDataList getFactoryMes() {
+		return this.shopRepository.messageDatas();
+	}
 }

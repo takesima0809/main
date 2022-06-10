@@ -134,7 +134,7 @@ public class FactoryBusiness {
 		String select = scan.next();
 
 		if (select.equals("1")) {
-			System.out.println("メッセージを入力しました");
+			System.out.println("メッセージ入力中");
 		}else if (select.equals("2")) {
 			System.out.println("メッセージを変更せずに戻ります。");
 			return null;
@@ -144,6 +144,26 @@ public class FactoryBusiness {
 		}
 
 		return strings;
+	}
+	
+	public void messageInputFlag(boolean flag) {
+		if(flag) {
+			System.out.println("メッセージが変更されました");
+		}else {
+			System.out.println("メッセージ入力失敗");
+			System.out.println("存在しない預かり番号です");
+		}
+		
+	}
+	
+	public void dateInputFlag(boolean flag) {
+		if(flag) {
+			System.out.println("日付が変更されました");
+		}else {
+			System.out.println("日付入力失敗");
+			System.out.println("存在しない預かり番号です");
+		}
+		
 	}
 
 
@@ -174,6 +194,9 @@ public class FactoryBusiness {
 
 		while(!formatCheck) {  
 			try{
+				if(strings.length!=2) {
+					return null;
+				}
 				if(!(strings[1].equals("お渡し可"))) {
 					sdf.parse(strings[1]);//正しい日付
 				}

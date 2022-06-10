@@ -24,7 +24,7 @@ public class FactoryBusiness {
 		System.out.println("5.終了します");
 		selectSrt = scan.next();
 
-		if(!(selectSrt.matches("[+-]?\\d*(\\.\\d+)?"))||Integer.parseInt(selectSrt)>5) {
+		if(!(selectSrt.matches("\\d*(\\.\\d+)?"))||Integer.parseInt(selectSrt)>5) {
 			System.out.println("エラーです。正常ではない値が入力されました");
 			return 0;
 		}

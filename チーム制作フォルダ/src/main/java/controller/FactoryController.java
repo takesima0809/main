@@ -35,14 +35,14 @@ public class FactoryController {
 			case 3: {
 				String[] message= factoryBusiness.cangeHandOverDay();
 				if(message!=null) {			
-					this.factoryBusiness.messageInputFlag(updataService.updataFinishDate(Integer.parseInt(message[0]),message[1]));
+					this.factoryBusiness.dateInputFlag(updataService.updataFinishDate(Integer.parseInt(message[0]),message[1]));
 				}
 				break;
 			}
 			case 4: {
 				String[] message= factoryBusiness.writeMassage();
 				if(message!=null) {
-					this.factoryBusiness.dateInputFlag(updataService.updataMessage(Integer.parseInt(message[0]),message[1]));
+					this.factoryBusiness.messageInputFlag(updataService.updataMessage(Integer.parseInt(message[0]),message[1]));
 				}
 				break;
 			}

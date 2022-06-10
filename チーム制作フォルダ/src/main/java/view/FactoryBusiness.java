@@ -216,7 +216,7 @@ public class FactoryBusiness {
 		String select = scan.next();
 
 		if (select.equals("1")) {
-			System.out.println("メッセージを入力しました");
+			System.out.println("メッセージを入力中");
 		}else if (select.equals("2")) {
 			System.out.println("メッセージを変更せずに戻ります。");
 			return null;

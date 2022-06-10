@@ -80,9 +80,9 @@ public class ShopBusiness {
 		for(int i=0;i<list.size();i++) {
 			viewClothesData viewClothesData=list.get(i);
 			System.out.print(String.format("%-8d",viewClothesData.getClothesId()));
-			System.out.print(format(viewClothesData.getClothesName(),24));
-			System.out.print(String.format("%6d",viewClothesData.getPrice())+"円");
-			System.out.print(String.format("%6d",viewClothesData.getFinishDay())+"日");
+			System.out.print(format(viewClothesData.getClothesName(),26));
+			System.out.print(format(viewClothesData.getPrice()+"円",10));
+			System.out.print(viewClothesData.getFinishDay()+"日");
 			System.out.println();
 		}
 		System.out.println();
@@ -215,7 +215,7 @@ public class ShopBusiness {
 			System.out.print(beforeDeposit.getClothesData());
 			System.out.print(String.format("%13b",beforeDeposit.getCleanOption1()));
 			System.out.print(String.format("%12b",beforeDeposit.getCleanOption2()));
-			System.out.println(String.format("%12d",stainNum)+"個");		
+			System.out.println(String.format("%9d",stainNum)+"個");		
 		}
 
 		System.out.println("上記を登録中\n");
@@ -258,7 +258,7 @@ public class ShopBusiness {
 		for (int i = 0; i <handOverCount.length; i++) {
 			if(handOverCount[i].matches("[+-]?\\d*(\\.\\d+)?")==false||!(handOverCount[i].length()==4))
 			{
-				System.out.println("エラー：見つかりませんでした");
+				System.out.println("エラー：見つかりませんでした。メニューに戻ります");
 			}
 		}
 
@@ -330,21 +330,21 @@ public class ShopBusiness {
 	}
 
 	public void viewDepositListToUserId(DepositDataList depositDataList) {
-		System.out.println("お預かり番号  お預かり日時         ユーザID  洋服番号 特急仕上げ　デラックス仕上げ　染抜き個数 お渡し予定日      工場からのメッセージ");
+		System.out.println("お預かり番号  お預かり日時          ユーザID  洋服番号  特急仕上げ　デラックス仕上げ　染抜き個数 お渡し予定日      工場からのメッセージ");
 		if(depositDataList.size()!=0) {
 			while(depositDataList.hasNext()) {
 				DepositData depositData=depositDataList.next();
-				System.out.print(String.format("%2d",depositData.getdepositNumber()));
-				System.out.print(String.format("%31s",depositData.getDepositDay()));
-				System.out.print(String.format("%3d",depositData.getUserId()));
-				System.out.print(String.format("%10d",depositData.getClothesId()));
-				System.out.print(String.format("%13s",depositData.getOption1()));
-				System.out.print(String.format("%6s",depositData.getOption2()));
-				System.out.print(String.format("%6s",depositData.getOption3())+"      ");
-				System.out.print(format(depositData.getFinishDay(),16));
+				System.out.print(String.format("%-14d",depositData.getdepositNumber()));
+				System.out.print(String.format("%-22s",depositData.getDepositDay()));
+				System.out.print(String.format("%-10d",depositData.getUserId()));
+				System.out.print(String.format("%-10d",depositData.getClothesId()));
+				System.out.print(String.format("%-12s",depositData.getOption1()));
+				System.out.print(String.format("%-18s",depositData.getOption2()));
+				System.out.print(String.format("%-1s",depositData.getOption3())+"          ");
+				System.out.print(format(depositData.getFinishDay(),1));
 
 				if(depositData.getFactoryMessage()==null) {
-					System.out.print(String.format("%6s",depositData.getFactoryMessage()));
+					System.out.print(String.format("%12s",depositData.getFactoryMessage()));
 				}else {
 					System.out.print("　"+depositData.getFactoryMessage());
 				}
@@ -353,7 +353,7 @@ public class ShopBusiness {
 				System.out.println();
 			}
 		}else {
-			System.out.println("データが存在しません");
+			System.out.println("データが存在しません。メニューへ戻ります");
 		}
 	}
 

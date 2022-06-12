@@ -27,15 +27,22 @@ public class ShopBusiness {
 		//お客様の名前入力
 		System.out.println("例　氏名,123456789(電話番号)");
 		System.out.println("例にしたがってお客様の情報を入力してください");
-		String userDataString = scan.next();
-		String[]userDataArray=userDataString.split(",");
+		System.out.println("戻る場合はEXITと入力してください");
+		String  scanS =scan.next();
+		if(scanS.equals("EXIT")) {
+			return null;
+		}
+		String[]userDataArray=scanS.split(",");
 
 
 		//電話番号を正しく入力するまで繰り返す
 		while(userDataArray.length!=2||userDataArray[1].matches("[+-]?\\d*(\\.\\d+)?")==false||userDataArray[1].length()<10) {
 			System.out.println("お客様情報を正しく入力してください");
-			userDataString = scan.next();
-			userDataArray=userDataString.split(",");
+			scanS = scan.next("戻る場合はEXITと入力してください");
+			if(scanS.equals("EXIT")) {
+				return null;
+			}
+			userDataArray=scanS.split(",");
 		}
 
 		UserName userName=new UserName(userDataArray[0]);
@@ -97,14 +104,14 @@ public class ShopBusiness {
 		{
 			try
 			{
-
 				System.out.println("追加の受け付けをしますか？\n1.はい\n2.いいえ\n戻る場合はEXITと入力してください");
 				scanS=scan.next();
+
 				if(scanS.equals("2"))
 				{
 					break;
 				}
-				if(scanS.equals("EXIT")||Integer.parseInt(scanS)>2) {
+				if(scanS.equals("EXIT")||Integer.parseInt(scanS)>2||Integer.parseInt(scanS)<1) {
 					System.out.println("メニューに戻ります");
 					return null;
 				}
@@ -227,33 +234,32 @@ public class ShopBusiness {
 		if(registerList==null) {
 			System.out.println("ユーザIDが存在しません");
 		}else {
-		System.out.println("登録完了");
-		System.out.println("預かり番号  預かり日時");
-		int price=0;
-		while(registerList.hasNext()) {
-			RegisterInfo registerInfo=registerList.next();
-			price+=registerInfo.getTotalPrice();
-			System.out.println(String.format("%04d",registerInfo.getdepositNumber())+"        "+registerInfo.getregistrationDate());//0埋めする
-		}
-		System.out.println("合計金額"+price+"円");
-		System.out.println("戻る場合はキーを入力してください");
-		Scanner scanner =new Scanner(System.in);
-		scanner.next();
+			System.out.println("登録完了");
+			System.out.println("預かり番号  預かり日時");
+			int price=0;
+			while(registerList.hasNext()) {
+				RegisterInfo registerInfo=registerList.next();
+				price+=registerInfo.getTotalPrice();
+				System.out.println(String.format("%04d",registerInfo.getdepositNumber())+"        "+registerInfo.getregistrationDate());//0埋めする
+			}
+			System.out.println("合計金額"+price+"円");
+			System.out.println("戻る場合はキーを入力してください");
+			Scanner scanner =new Scanner(System.in);
+			scanner.next();
 		}
 	}
 
 	// ３．お渡し入力
 	public List<Integer> viewHandOver() {
 		Scanner scan = new Scanner(System.in);
+		String scanS;
 		String[] handOverCount;
 		List<Integer>list=new ArrayList<>();
 		System.out.println("仕上がり済みの4桁のお預かり番号をカンマ区切りで最大十件入力してください");
 		System.out.println("例：0001,0002,0003");
 		System.out.println("仕上がり済みのお預かり番号が見つからない場合エラーとなります");
-
-
-
-		handOverCount=scan.next().split(",");
+		scanS=scan.next();
+		handOverCount=scanS.split(",");
 
 		for (int i = 0; i <handOverCount.length; i++) {
 			if(handOverCount[i].matches("[+-]?\\d*(\\.\\d+)?")==false||!(handOverCount[i].length()==4))
@@ -270,7 +276,7 @@ public class ShopBusiness {
 				list.add(Integer.parseInt(m.group(1)));
 			}
 		}
-		
+
 		if(list.size()>10) {
 			System.out.println("一度に入力できる件数は10件までです");
 			return null;
@@ -317,13 +323,15 @@ public class ShopBusiness {
 	public UserId inputUserId() {
 		System.out.println("ユーザIDを入力してください");
 		Scanner scan = new Scanner(System.in);
+		String scanS;
 		UserId userId=null;
+		scanS=scan.next();
+		
 		try {
-			userId=new UserId(scan.nextInt());
-
+			userId = new UserId(Integer.parseInt(scanS));
 		}
-		catch(NullPointerException e) {
-			System.out.println("値が不正です");
+		catch(Exception e) {
+			System.out.println("エラーが起きたのでメニューに戻ります");
 		}
 		return userId;
 
@@ -340,7 +348,7 @@ public class ShopBusiness {
 				System.out.print(String.format("%-10d",depositData.getClothesId()));
 				System.out.print(String.format("%-12s",depositData.getOption1()));
 				System.out.print(String.format("%-18s",depositData.getOption2()));
-				System.out.print(String.format("%-1s",depositData.getOption3())+"          ");
+				System.out.print(String.format("%-1s",depositData.getOption3())+"       ");
 				System.out.print(format(depositData.getFinishDay(),1));
 
 				if(depositData.getFactoryMessage()==null) {

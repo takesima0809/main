@@ -18,6 +18,7 @@ import entities.BeforeDeposit;
 import entities.ClothesData;
 import entities.DepositData;
 import entities.DepositDataList;
+import entities.NewFactoryMessage;
 import entities.RegisterInfo;
 import entities.UserData;
 import entities.viewClothesData;
@@ -403,17 +404,16 @@ public class ShopRepository {
 		return list;
 	}
 	
-	public DepositDataList messageDatas() {
-		DepositDataList depositDataList=new DepositDataList();
+	public List<NewFactoryMessage> messageDatas() {
+		List<NewFactoryMessage>list=new ArrayList<>();
 		Connection con=getConnection();
 		try(PreparedStatement preparableStatement=
-				con.prepareStatement("select * from Regist where FactoryMessage is not NULL;")){
+				con.prepareStatement("select User.UserName,Regist.FactoryMessage from Regist inner join User on User.UserId=Regist.UserId  where Factorymessage is not null ORDER BY UpdateTime DESC;")){
 			try(ResultSet rs =preparableStatement.executeQuery()){
 				while(rs.next()) {
-					DepositData depositData=new DepositData(rs.getInt("DepositNumber"),setDate(rs.getString("DepositDate")), rs.getInt("UserId"),rs.getInt("ClothesId"),rs.getBoolean("WashHurryFinish"),
-							rs.getBoolean("WashDeluxeFinish"),rs.getInt("WashStainRemoval"),
-							rs.getInt("TotalAmount"),deleteTime(rs.getString("FinishDate")),rs.getString("FactoryMessage"));
-					depositDataList.addData(depositData);
+					NewFactoryMessage newFactoryMessage=new NewFactoryMessage(rs.getString("User.UserName"), rs.getString("Regist.FactoryMessage"));
+					list.add(newFactoryMessage);
+					
 				}
 				rs.close();
 			}catch (Exception e) {
@@ -425,7 +425,7 @@ public class ShopRepository {
 			System.out.println(e);
 		}
 
-		return depositDataList;
+		return list;
 	}
 	
 	public boolean userIdCheck(int id) {

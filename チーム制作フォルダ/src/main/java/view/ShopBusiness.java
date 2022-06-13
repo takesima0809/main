@@ -226,7 +226,7 @@ public class ShopBusiness {
 			System.out.print(beforeDeposit.getClothesData());
 			System.out.print(String.format("%13b",beforeDeposit.getCleanOption1()));
 			System.out.print(String.format("%12b",beforeDeposit.getCleanOption2()));
-			System.out.println(String.format("%9d",stainNum)+"個");		
+			System.out.println(String.format("%9d",beforeDeposit.getCleanOption3())+"個");		
 		}
 
 		System.out.println("上記を登録中\n");

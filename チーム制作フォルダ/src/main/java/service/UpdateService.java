@@ -3,9 +3,9 @@ package service;
 
 import repositories.ShopRepository;
 
-public class UpdataService {
+public class UpdateService {
 	private final ShopRepository shopRepository;
-	public UpdataService() {
+	public UpdateService() {
 		this.shopRepository = new ShopRepository();
 	}
 	public boolean updataFinishDate(int depositId,String day) {

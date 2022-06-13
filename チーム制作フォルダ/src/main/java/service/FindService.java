@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import entities.DepositDataList;
+import entities.NewFactoryMessage;
 import entities.viewClothesData;
 import repositories.ShopRepository;
 import userValues.UserId;
@@ -48,7 +49,7 @@ public class FindService {
 		return this.shopRepository.findAll();
 	}
 	
-	public DepositDataList getFactoryMes() {
+	public List<NewFactoryMessage> getFactoryMes() {
 		return this.shopRepository.messageDatas();
 	}
 }

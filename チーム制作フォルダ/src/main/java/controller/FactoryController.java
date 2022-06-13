@@ -1,17 +1,17 @@
 package controller;
 
 import service.FindService;
-import service.UpdataService;
+import service.UpdateService;
 import view.FactoryBusiness;
 
 public class FactoryController {
 	private final  FactoryBusiness factoryBusiness;
-	private final UpdataService updataService;
+	private final UpdateService updataService;
 	private final FindService findService;
 
 	public FactoryController() {
 		this.factoryBusiness=new FactoryBusiness();
-		this.updataService=new UpdataService();
+		this.updataService=new UpdateService();
 		this.findService=new FindService();
 	}
 

@@ -8,7 +8,7 @@ import entities.BeforeDeposit;
 import entities.UserData;
 import repositories.ShopRepository;
 import service.AddService;
-import service.UpdataService;
+import service.UpdateService;
 import userValues.PhoneNumber;
 import userValues.UserId;
 import userValues.UserName;
@@ -28,7 +28,7 @@ public class repositoryTest {
 		//RegisterInfo registerInfo=shopRepository.showAddDatas(beforeDeposit, 1).next();
 //		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //		DepositData depositData=null;
-		UpdataService updataService=new UpdataService();
+		UpdateService updataService=new UpdateService();
 		AddService addService=new AddService();
 		
 		//ユーザ登録

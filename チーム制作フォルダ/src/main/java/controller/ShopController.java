@@ -9,6 +9,7 @@ import entities.UserData;
 import service.AddService;
 import service.DeleteService;
 import service.FindService;
+import userValues.UserId;
 import view.MenuView;
 import view.ShopBusiness;
 
@@ -39,7 +40,9 @@ public class ShopController {
 			{
 			case 1:
 				UserData userData=this.shopBusiness.viewMemberRegistration();
-				addService.UserSignUp(userData.getUserName().toStr(), userData.getPhoneNumber().toStr());
+				if(userData!=null) {
+				this.addService.UserSignUp(userData.getUserName().toStr(), userData.getPhoneNumber().toStr());
+				}
 				break;
 			case 2:
 				List<BeforeDeposit> list=this.shopBusiness.viewReception(findService.findClothesDatas());
@@ -57,7 +60,10 @@ public class ShopController {
 				}
 				break;
 			case 4:
-				this.shopBusiness.viewDepositListToUserId(this.findService.findDepositDatas(this.shopBusiness.inputUserId()));
+				UserId userId=this.shopBusiness.inputUserId();
+				if(userId!=null) {
+				this.shopBusiness.viewDepositListToUserId(this.findService.findDepositDatas(userId));
+				}
 				break;
 			case 5:
 				System.exit(0);

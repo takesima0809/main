@@ -1,7 +1,11 @@
 package view;
 
 import java.nio.charset.Charset;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -292,11 +296,11 @@ public class ShopBusiness {
 			while(depositDataList.hasNext()) {
 				DepositData depositData=depositDataList.next();
 				System.out.print(String.format("%04d",depositData.getdepositNumber()));
-				System.out.print(String.format("%29s",depositData.getDepositDay()));
+				System.out.print(String.format("%29s",getPluseNineDate(depositData.getDepositDay())));
 				System.out.print(String.format("%2d",depositData.getUserId()));
 				System.out.print(String.format("%10d",depositData.getClothesId()));
 				System.out.println();
-
+			}
 				System.out.println("こちらの一覧をお客様にお渡ししますか？");
 				System.out.println("1.確定\n2.取り消し");
 				Scanner scan=new Scanner(System.in);
@@ -311,7 +315,7 @@ public class ShopBusiness {
 					return false;
 				}
 				System.out.println("値が不正です。取り消ししメニューに戻ります");
-			}
+			
 		}else {
 			System.out.println("存在しない預かり番号またはお渡し状態ではない預かり番号が含まれています");
 		}
@@ -334,7 +338,6 @@ public class ShopBusiness {
 			System.out.println("エラーが起きたのでメニューに戻ります");
 		}
 		return userId;
-
 	}
 
 	public void viewDepositListToUserId(DepositDataList depositDataList) {
@@ -356,8 +359,6 @@ public class ShopBusiness {
 				}else {
 					System.out.print("　"+depositData.getFactoryMessage());
 				}
-
-
 				System.out.println();
 			}
 		}else {
@@ -394,5 +395,30 @@ public class ShopBusiness {
 
 		return res;
 	}
-
+	
+	public String getPluseNineDate(String str) {
+		//処理
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		// Date型変換
+		Date formatDate=null;
+		try {
+			formatDate = sdf.parse(str);
+		} catch (ParseException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
+		
+		//カレンダー型
+		Calendar cdr =Calendar.getInstance();
+		cdr.setTime(formatDate);
+		
+		cdr.add(Calendar.HOUR_OF_DAY,9);
+		
+		formatDate=cdr.getTime();
+		//str変換
+		String string=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(formatDate);
+		
+		return string;
+	}
 }

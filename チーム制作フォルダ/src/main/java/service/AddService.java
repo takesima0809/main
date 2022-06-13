@@ -42,12 +42,8 @@ public class AddService {
 			TotalPrice totalPrice=new TotalPrice(this.shopRepository.getClothesData(beforeDeposit.getClothesData()).getPrice().toInt());
 			FinishDay finishDay=new FinishDay(shopRepository.getClothesData(beforeDeposit.getClothesData()).getDay().toInt());
 			
-			//処理
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			
 			// Date型変換
-			Date date=new Date();
-			//Date formatDate=sdf.parse(beforeDeposit.getFinishDay());
+			Date date=new Date();	
 			
 			//カレンダー型
 			Calendar cdr =Calendar.getInstance();

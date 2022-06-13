@@ -23,6 +23,7 @@ import entities.UserData;
 import entities.viewClothesData;
 
 public class ShopRepository {
+	
 	private final String url ="jdbc:mysql://3.112.79.30:3306/cleaning_shop";
 	private final String user ="trainee";
 	private final String password="trainee";
@@ -323,6 +324,7 @@ public class ShopRepository {
 	public DepositDataList findDepositDataList(List<Integer>list) throws SQLException {
 		DepositDataList depositDataList=new DepositDataList();
 		Connection con=getConnection();
+		
 		for(int i=0;i<list.size();i++) {
 			try(PreparedStatement preparableStatement=
 					con.prepareStatement("select * from Regist where DepositNumber = ?;")){
@@ -335,8 +337,9 @@ public class ShopRepository {
 								rs.getInt("TotalAmount"),deleteTime(rs.getString("FinishDate")),rs.getString("FactoryMessage"));
 						depositDataList.addData(depositData);	
 						}
-						rs.close();
+					
 					}
+					rs.close();
 				}catch (Exception e) {
 					System.out.println(e);
 				}
@@ -346,7 +349,6 @@ public class ShopRepository {
 				System.out.println(e);
 			}
 		}
-		
 		con.close();
 		return depositDataList;
 	}
